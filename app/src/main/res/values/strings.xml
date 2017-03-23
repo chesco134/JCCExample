@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">JCCExample</string>
+    <string name="dummy_diaplay_message">EPA! n.n\'</string>
+    <string name="mensaje_error_conexion">Servicio por el momento no disponible</string>
+</resources>
