@@ -101,7 +101,7 @@ public class MyRowListAdapter extends BaseAdapter {
 
         private String pais;
 
-        public ButtonClickHandler(String pais){
+        private ButtonClickHandler(String pais){
             this.pais = pais;
         }
 

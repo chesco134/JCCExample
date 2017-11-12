@@ -26,35 +26,35 @@ public class DeleteActions {
 
     public static boolean deleteDatoInteres(Context context, DatoInteres datoInteres){
         SQLiteDatabase db = new MyDB(context).getWritableDatabase();
-        boolean deleted = db.delete("DatoInteres", "idDatoInteres = cast(? as integer)", new String[]{String.valueOf(datoInteres.getIdDatoInteres())}) > 1;
+        boolean deleted = db.delete("DatoInteres", "idDatoInteres = cast(? as integer)", new String[]{String.valueOf(datoInteres.getIdDatoInteres())}) > 0;
         db.close();
         return deleted;
     }
 
     public static boolean deleteModismo(Context context, Modismo modismo){
         SQLiteDatabase db = new MyDB(context).getWritableDatabase();
-        boolean deleted = db.delete("Modismo", "idModismo = cast(? as integer)", new String[]{String.valueOf(modismo.getIdModismo())}) > 1;
+        boolean deleted = db.delete("Modismo", "idModismo = cast(? as integer)", new String[]{String.valueOf(modismo.getIdModismo())}) > 0;
         db.close();
         return deleted;
     }
 
     public static boolean deleteSignificado(Context context, Significado significado){
         SQLiteDatabase db = new MyDB(context).getWritableDatabase();
-        boolean deleted = db.delete("Significado", "iidSignificado = cast(? as integer)", new String[]{String.valueOf(significado.getIdSignificado())}) > 1;
+        boolean deleted = db.delete("Significado", "iidSignificado = cast(? as integer)", new String[]{String.valueOf(significado.getIdSignificado())}) > 0;
         db.close();
         return deleted;
     }
 
     public static boolean deleteEjemplo(Context context, Ejemplo ejemplo){
         SQLiteDatabase db = new MyDB(context).getWritableDatabase();
-        boolean deleted = db.delete("Ejemplo", "idEjemplo = cast(? as integer)", new String[]{String.valueOf(ejemplo.getIdEjemplo())}) > 1;
+        boolean deleted = db.delete("Ejemplo", "idEjemplo = cast(? as integer)", new String[]{String.valueOf(ejemplo.getIdEjemplo())}) > 0;
         db.close();
         return deleted;
     }
 
     public static boolean deleteModismoRelacion(Context context, ModismoRelacion modismoRelacion){
         SQLiteDatabase db = new MyDB(context).getWritableDatabase();
-        boolean deleted = db.delete("ModismoRelacion", "idModismo_1 = cast(? as integrar) and idModismo_2 = cast(? as integer)", new String[]{String.valueOf(modismoRelacion.getIdModismo1()), String.valueOf(modismoRelacion.getIdModismo2())}) > 1;
+        boolean deleted = db.delete("ModismoRelacion", "idModismo_1 = cast(? as integrar) and idModismo_2 = cast(? as integer)", new String[]{String.valueOf(modismoRelacion.getIdModismo1()), String.valueOf(modismoRelacion.getIdModismo2())}) > 0;
         db.close();
         return deleted;
     }

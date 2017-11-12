@@ -2,6 +2,7 @@ package com.example.brenda.jccexample.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import com.example.brenda.jccexample.R;
 import com.example.brenda.jccexample.database.AccionesEscritura;
 import com.example.brenda.jccexample.database.AccionesLectura;
+import com.example.brenda.jccexample.database.MyDB;
 import com.example.brenda.jccexample.dialogos.EntradaTexto;
 import com.example.brenda.jccexample.dialogos.ProveedorToast;
 import com.example.brenda.jccexample.fragmentos.DummyDisplayFragment;
@@ -179,6 +181,9 @@ public class CentralPoint extends AppCompatActivity
             return true;
         }else if(itemId == R.id.action_set_host){
             setHost();
+            return true;
+        }else if(itemId == R.id.action_update_database){
+            new MyDB(this).onUpgrade(new MyDB(this).getWritableDatabase(), 1, 2);
             return true;
         }
         return super.onOptionsItemSelected(item);

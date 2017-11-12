@@ -18,4 +18,10 @@
         android:orderInCategory="100"
         android:title="@string/action_set_host"
         app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/action_update_database"
+        android:orderInCategory="100"
+        android:title="@string/action_update_database"
+        app:showAsAction="collapseActionView" />
 </menu>
