@@ -3,9 +3,14 @@ package com.example.brenda.jccexample.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.brenda.jccexample.pojo.DatoInteres;
+import com.example.brenda.jccexample.pojo.Ejemplo;
+import com.example.brenda.jccexample.pojo.Modismo;
+import com.example.brenda.jccexample.pojo.ModismoRelacion;
 import com.example.brenda.jccexample.pojo.Pais;
+import com.example.brenda.jccexample.pojo.Significado;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +27,7 @@ public class AccionesLectura {
         Pais pais;
         while(c.moveToNext()){
             pais = new Pais();
-            pais.setIdPais(c.getString(c.getColumnIndex("idPais")));
+            pais.setIdPais(c.getInt(c.getColumnIndex("idPais")));
             pais.setPais(c.getString(c.getColumnIndex("pais")));
             paises.add(pais);
         }
@@ -37,12 +42,36 @@ public class AccionesLectura {
         Pais _pais = null;
         if(c.moveToFirst()){
             _pais = new Pais();
-            _pais.setIdPais(c.getString(c.getColumnIndex("idPais")));
+            _pais.setIdPais(c.getInt(c.getColumnIndex("idPais")));
             _pais.setPais(pais);
         }
         c.close();
         db.close();
         return _pais;
+    }
+
+    public static int getIdPaisFromPais(Context context, String pais){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select idPais from Pais where Pais = ?", new String[]{pais});
+        int idPais = -1;
+        if(c.moveToFirst()){
+            c.getInt(c.getColumnIndex("idPais"));
+        }
+        c.close();
+        db.close();
+        return idPais;
+    }
+
+    public static String getIdPaisFromText(Context context, int idPais){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select pais from Pais where idPais = cast(? as Integer)", new String[]{String.valueOf(idPais)});
+        String pais = null;
+        if(c.moveToFirst()){
+            pais = c.getString(c.getColumnIndex("pais"));
+        }
+        c.close();
+        db.close();
+        return pais;
     }
 
     public static DatoInteres[] obtenerDatosInteres(Context context){
@@ -54,7 +83,24 @@ public class AccionesLectura {
             datoInteres = new DatoInteres();
             datoInteres.setIdDatoInteres(c.getString(c.getColumnIndex("idDatoInteres")));
             datoInteres.setDatoInteres(c.getString(c.getColumnIndex("DatoInteres")));
-            datoInteres.setPaisIdPais(c.getString(c.getColumnIndex("Pais_idPais")));
+            datoInteres.setPaisIdPais(c.getInt(c.getColumnIndex("Pais_idPais")));
+            datosInteres.add(datoInteres);
+        }
+        c.close();
+        db.close();
+        return datosInteres.toArray(new DatoInteres[]{});
+    }
+
+    public static DatoInteres[] obtenerDatosInteresPais(Context context, Pais pais){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select * from DatoInteres where Pais_idPais = cast(? as integer)", new String[]{String.valueOf(pais.getIdPais())});
+        List<DatoInteres> datosInteres = new ArrayList<>();
+        DatoInteres datoInteres;
+        while(c.moveToNext()){
+            datoInteres = new DatoInteres();
+            datoInteres.setIdDatoInteres(c.getString(c.getColumnIndex("idDatoInteres")));
+            datoInteres.setDatoInteres(c.getString(c.getColumnIndex("DatoInteres")));
+            datoInteres.setPaisIdPais(pais.getIdPais());
             datosInteres.add(datoInteres);
         }
         c.close();
@@ -64,7 +110,7 @@ public class AccionesLectura {
 
     public static DatoInteres obtenerDatoInteresPais(Context context, Pais pais){
         SQLiteDatabase db = new MyDB(context).getReadableDatabase();
-        Cursor c = db.rawQuery("select * from DatoInteres where Pais_idPais = ?", new String[]{pais.getIdPais()});
+        Cursor c = db.rawQuery("select * from DatoInteres where Pais_idPais = ?", new String[]{String.valueOf(pais.getIdPais())});
         DatoInteres datoInteres = null;
         if(c.moveToFirst()){
             datoInteres = new DatoInteres();
@@ -75,5 +121,95 @@ public class AccionesLectura {
         c.close();
         db.close();
         return datoInteres;
+    }
+
+    public static Modismo[] obtenerModismoPorPais(Context context, Pais pais){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select * from Modismo where idPais = ?", new String[] {String.valueOf(pais.getIdPais())});
+        List<Modismo> modismos = new ArrayList<>();
+        Modismo modismo;
+        if(c.moveToFirst()) {
+            while (c.moveToNext()){
+                modismo = new Modismo(c.getInt(c.getColumnIndex("idmodismo")));
+                modismo.setExpresion(c.getString(c.getColumnIndex("expresin")));
+                modismo.setPais(pais.getIdPais());
+                modismos.add(modismo);
+            }
+        }
+        c.close();
+        db.close();
+        return modismos.toArray(new Modismo[]{});
+    }
+
+    public static Modismo[] obtenerModismos(Context context) {
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select * from Modismo", null);
+        List<Modismo> modismos = new ArrayList<>();
+        Modismo modismo;
+        if(c.moveToFirst()) {
+            while (c.moveToNext()){
+                modismo = new Modismo(c.getInt(c.getColumnIndex("idModismo")));
+                modismo.setExpresion(c.getString(c.getColumnIndex("Expresion")));
+                modismo.setPais(c.getInt(c.getColumnIndex("idPais")));
+                modismos.add(modismo);
+                Log.d(AccionesLectura.class.getName(), modismo.getExpresion());
+            }
+        }else{
+            Log.d(AccionesLectura.class.getName(), "No hay modismos.");
+        }
+        c.close();
+        db.close();
+        return modismos.toArray(new Modismo[]{});
+    }
+
+    public static Modismo obtenerModismo(Context context, int idModismo){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select * from Modismo where idModismo = cast(? as integer)", new String[] {String.valueOf(idModismo)});
+        Modismo modismo;
+        modismo = c.moveToFirst() ? new Modismo(idModismo, c.getString(c.getColumnIndex("Expresion")), c.getInt(c.getColumnIndex("idPais"))) : null;
+        c.close();
+        db.close();
+        return modismo;
+    }
+
+    public static Modismo obtenerModismo(Context context, String expresion){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select * from Modismo where Expresion = ?", new String[]{expresion});
+        Modismo modismo = c.moveToFirst() ? new Modismo(c.getInt(c.getColumnIndex("idModismo")), expresion, c.getInt(c.getColumnIndex("idPais"))) : null;
+        c.close();
+        db.close();
+        return modismo;
+    }
+
+    public static Significado obtenerSignificado(Context context, Modismo modismo){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select * from Significado where idModismo = cast(? as integer)", new String[] {String.valueOf(modismo.getIdModismo())});
+        Significado significado = c.moveToFirst() ? new Significado(c.getInt(c.getColumnIndex("idSignificado")), c.getString(c.getColumnIndex("Significado")), modismo.getIdModismo()) : null;
+        c.close();
+        db.close();
+        return significado;
+    }
+
+    public static Ejemplo obtenerEjemplo(Context context, Modismo modismo){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select * from Ejemplo where idModismo = cast(? as integer)", new String[]{String.valueOf(modismo.getIdModismo())});
+        Ejemplo ejemplo = c.moveToFirst() ? new Ejemplo(c.getInt(c.getColumnIndex("idEjemplo")), c.getString(c.getColumnIndex("Ejemplo")), modismo.getIdModismo()) : null;
+        c.close();
+        db.close();
+        return ejemplo;
+    }
+
+    public static ModismoRelacion[] obtenerModismosSimilares(Context context, Modismo modismo){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select * from ModismoRelacion where idModismo_1 = cast(? as integer)", new String[] {String.valueOf(modismo.getIdModismo())});
+        List<ModismoRelacion> modismosRelacionados = new ArrayList<>();
+        ModismoRelacion modismoRelacionado;
+        while(c.moveToNext()){
+            modismoRelacionado = new ModismoRelacion(modismo.getIdModismo(), c.getInt(c.getColumnIndex("idModismo_2")));
+            modismosRelacionados.add(modismoRelacionado);
+        }
+        c.close();
+        db.close();
+        return modismosRelacionados.toArray(new ModismoRelacion[]{});
     }
 }

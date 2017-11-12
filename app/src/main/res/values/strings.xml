@@ -1,5 +1,66 @@
 <resources>
-    <string name="app_name">JCCExample</string>
     <string name="dummy_diaplay_message">EPA! n.n\'</string>
     <string name="mensaje_error_conexion">Servicio por el momento no disponible</string>
+    <string name="action_retry">Reubicar</string>
+    <string name="my_voice_activity_menu_get_text">Voz</string>
+    <string name="app_name">Modismos</string>
+
+    <string name="barra_de_bocados_aviso">Aviso</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="central_point_menu_agregar_modismo">Agregar Modismo</string>
+    <string name="central_point_menu_ver_modismos">Ver Modismos</string>
+    <string name="central_point_menu_accidentes">Accidentes</string>
+    <string name="central_point_menu_configuracion">Configuración</string>
+
+    <string name="crear_convocatoria_fecha_incorrecta">La fecha es incorrecta</string>
+    <string name="crear_convocatoria_hora_incorrecta">La hora es incorrecta</string>
+    <string name="crear_convocatoria_datos_incorrectos">Debe llenar todos los datos</string>
+    <string name="crear_convocatoria_sitio_en_construccion">Sitio en construcción :)</string>
+    <string name="crear_convocatoria_error_pdf">No se guardó a PDF</string>
+    <string name="crear_convocatoria_archivo_creado">Archivo creado n.n</string>
+
+    <string name="dialogo_entrada_texto_cancelar">Cancelar</string>
+    <string name="dialogo_entrada_texto_aceptar">Aceptar</string>
+    <string name="dialogo_entrada_texto_modificar_texto">Modifique el elemento</string>
+    <string name="dialogo_entrada_texto_agregar_texto">Agregue elemento</string>
+    <string name="dialogo_informacion_confirmar_salida">¿Está seguro de salir? Se perderán los datos al moemento (sistema de borrador en contrucción)</string>
+    <string name="dialogo_remocion_elementos_titulo">Seleccione elementos a remover</string>
+
+    <string name="nuevo_condominio_direccion">Dirección</string>
+    <string name="nuevo_condominio_edad">Antigüedad</string>
+    <string name="nuevo_condominio_inmoviliaria">Inmobiliaria</string>
+    <string name="nuevo_condominio_tipo_de_condominio">Tipo de Condominio</string>
+    <string name="nuevo_condominio_nombre_del_condominio">Nombre del condominio</string>
+    <string name="nuevo_condominio_siguiente">Siguiente</string>
+    <string name="nuevo_condominio_cantidad_de_lugares_estacionamiento"># Cajones de estacionamiento</string>
+    <string name="nuevo_condominio_costo_aprox_por_unidad_privativa">Costo aprox por unidad privativa</string>
+    <string name="nuevo_condominio_capacidad_de_cisterna">Capacidad de cisterna en litros</string>
+    <string name="nuevo_condominio_hecho">Listo</string>
+
+    <string name="signup_usuario">Nombres</string>
+    <string name="signup_ap_paterno">Apellido paterno</string>
+    <string name="signup_ap_materno">Apellido materno</string>
+    <string name="signup_escolaridad">Escolaridad</string>
+    <string name="signup_tipo_de_administrador">Tipo de administrador</string>
+    <string name="signup_remuneracion">Remuneración</string>
+    <string name="startup_email">E-mail</string>
+    <string name="signup_date_of_birth">Fecha de nacimiento</string>
+    <string name="signup_registrar">Registrar</string>
+    <string name="startup_pass">Contraseña</string>
+    <string name="signup_pista_password">La contraseña debe tener al menos 5 caracteres, incluir una mayúscula, un número y un caracter no alfanumérico: !@#$&amp;*</string>
+    <string name="signup_contacto">Teléfono</string>
+    <string name="signup_habilitar_profesion">Cuento con profesión</string>
+    <string name="signup_profesion">Profesión</string>
+
+    <string name="action_add_person">Buscar Modismo</string>
+    <string name="slogan">Modismos</string>
+    <string name="paises_row_list_entry">Bandera del país</string>
+    <string name="action_set_host">Server Host</string>
+    <string name="significado_fragment_layout_significado">Significado:</string>
+    <string name="significado_fragment_layout_ejemplo">Ejemplo:</string>
+    <string name="significado_fragment_layout_ver_relacionados">Ver relacionados</string>
 </resources>

@@ -2,10 +2,16 @@ package com.example.brenda.jccexample.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.brenda.jccexample.pojo.DatoInteres;
+import com.example.brenda.jccexample.pojo.Ejemplo;
+import com.example.brenda.jccexample.pojo.Modismo;
+import com.example.brenda.jccexample.pojo.ModismoRelacion;
 import com.example.brenda.jccexample.pojo.Pais;
+import com.example.brenda.jccexample.pojo.Significado;
 
 /**
  * Created by Brenda on 08/03/2017.
@@ -17,17 +23,57 @@ public class AccionesEscritura {
         ContentValues values = new ContentValues();
         values.put("idPais", pais.getIdPais());
         values.put("pais", pais.getPais());
-        db.insert("Pais", "---", values);
+        Log.d("AccionesEscritura", "Escribiendo Pais: " + pais.getPais());
+        try{ db.insert("Pais", "---", values); } catch(SQLiteConstraintException ignore){ }
         db.close();
     }
 
     public static void escribeDatoInteres(Context context, DatoInteres datoInteres){
         SQLiteDatabase db = new MyDB(context).getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("idPais", datoInteres.getIdDatoInteres());
-        values.put("pais", datoInteres.getDatoInteres());
+        values.put("idDatoInteres", datoInteres.getIdDatoInteres());
+        values.put("DatoInteres", datoInteres.getDatoInteres());
         values.put("Pais_idPais", datoInteres.getPaisIdPais());
-        db.insert("Pais", "---", values);
+        try{ db.insert("DatoInteres", "---", values); } catch(SQLiteConstraintException ignore){ }
+        db.close();
+    }
+
+    public static void escribeModismo(Context context, Modismo modismo){
+        SQLiteDatabase db = new MyDB(context).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("idModismo", modismo.getIdModismo());
+        values.put("Expresion", modismo.getExpresion());
+        values.put("idPais", modismo.getPais());
+        try{ db.insert("Modismo", "---", values); } catch(SQLiteConstraintException ignore){ }
+        db.close();
+    }
+
+    public static void escribeSignificado(Context context, Significado significado){
+        SQLiteDatabase db = new MyDB(context).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("idSignificado", significado.getIdSignificado());
+        values.put("Significado", significado.getSignificado());
+        values.put("idModismo", significado.getIdModismo());
+        try{ db.insert("Significado", "---", values); } catch(SQLiteConstraintException ignore){ }
+        db.close();
+    }
+
+    public static void escribeEjemplo(Context context, Ejemplo ejemplo){
+        SQLiteDatabase db = new MyDB(context).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("idEjemplo", ejemplo.getIdEjemplo());
+        values.put("Ejemplo", ejemplo.getEjemplo());
+        values.put("idModismo", ejemplo.getIdModismo());
+        try{ db.insert("Ejemplo", "---", values); } catch(SQLiteConstraintException ignore){ }
+        db.close();
+    }
+
+    public static void escribeModismoRelacion(Context context, ModismoRelacion modismoRelacionado){
+        SQLiteDatabase db = new MyDB(context).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("idModismo_1", modismoRelacionado.getIdModismo1());
+        values.put("idModismo_2", modismoRelacionado.getIdModismo2());
+        try{ db.insert("ModismoRelacion", "---", values); } catch(SQLiteConstraintException ignore){ }
         db.close();
     }
 }

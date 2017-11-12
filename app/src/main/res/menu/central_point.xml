@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_add_by_voice"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/action_add_person"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_retry"
+        android:orderInCategory="100"
+        android:title="@string/action_retry"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/action_set_host"
+        android:orderInCategory="100"
+        android:title="@string/action_set_host"
+        app:showAsAction="collapseActionView" />
+</menu>

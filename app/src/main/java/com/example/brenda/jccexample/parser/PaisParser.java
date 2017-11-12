@@ -24,7 +24,7 @@ public class PaisParser {
 		Pais pais;
 		try{
 			pais = new Pais();
-			pais.setIdPais(json.getString("idPais"));
+			pais.setIdPais(json.getInt("idPais"));
 			pais.setPais(json.getString("pais"));
 		}catch(JSONException e){
 			e.printStackTrace();

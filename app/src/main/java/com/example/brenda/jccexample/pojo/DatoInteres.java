@@ -5,7 +5,7 @@ public class DatoInteres {
 	// A esto me refer�a cuando te dec�a que hac�a clases por cada Entidad en la BD de inter�s.
 	private String idDatoInteres;
 	private String datoInteres;
-	private String paisIdPais;
+	private int paisIdPais;
 
 	public String getIdDatoInteres() {
 		return idDatoInteres;
@@ -20,11 +20,11 @@ public class DatoInteres {
 		this.datoInteres = datoInteres;
 	}
 
-	public String getPaisIdPais() {
+	public int getPaisIdPais() {
 		return paisIdPais;
 	}
 
-	public void setPaisIdPais(String paisIdPais) {
+	public void setPaisIdPais(int paisIdPais) {
 		this.paisIdPais = paisIdPais;
 	}
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_agregar_modismo"
+            android:icon="@drawable/ic_add_circle_outline_white_24dp"
+            android:title="@string/central_point_menu_agregar_modismo" />
+        <item
+            android:id="@+id/nav_ver_modismos"
+            android:icon="@drawable/ic_search_white_24dp"
+            android:title="@string/central_point_menu_ver_modismos" />
+        <!--
+        <item
+            android:id="@+id/nav_accidentes"
+            android:icon="@drawable/ic_event_note_black_24dp"
+            android:title="@string/central_point_menu_accidentes" />
+        -->
+        <!--
+        <item
+            android:id="@+id/nav_recursos_humanos"
+            android:icon="@drawable/ic_work_black_24dp"
+            android:title="@string/central_point_menu_recursos_humanos" />
+        -->
+    <!--
+    <item
+        android:id="@+id/nav_configuracion"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="@string/central_point_menu_configuracion" />
+        -->
+</group>
+<!--
+<item android:title="Communicate">
+    <menu>
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Share" />
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Send" />
+    </menu>
+</item>
+-->
+</menu>
