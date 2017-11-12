@@ -25,7 +25,7 @@ public class DatoInteresParser {
 		DatoInteres datoInteres;
 		try{
 			datoInteres = new DatoInteres();
-			datoInteres.setIdDatoInteres(json.getString("idDatoInteres"));
+			datoInteres.setIdDatoInteres(json.getInt("idDatoInteres"));
 			datoInteres.setDatoInteres(json.getString("DatoInteres"));
 			datoInteres.setPaisIdPais(json.getInt("Pais_idPais"));
 		}catch(JSONException e){

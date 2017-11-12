@@ -11,6 +11,7 @@ import com.example.brenda.jccexample.pojo.ModismoRelacion;
 import com.example.brenda.jccexample.pojo.Pais;
 import com.example.brenda.jccexample.proveedores.RegexpProvider;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class ParseModismoRelacion {
 
-    public static ModismoRelacion[] parseModismoRelacion(Context context, JSONObject json){
+    public static ModismoRelacion[] parseModismoRelacion2(Context context, JSONObject json){
         List<ModismoRelacion> modismosRelacionados = new ArrayList<>();
         ModismoRelacion modismoRelacionado;
         try {
@@ -62,6 +63,21 @@ public class ParseModismoRelacion {
             }
         }catch(JSONException ignore){
         }
+        return modismosRelacionados.toArray(new ModismoRelacion[]{});
+    }
+
+    public static ModismoRelacion[] parseModismoRelacion(JSONObject json){
+        List<ModismoRelacion> modismosRelacionados = new ArrayList<>();
+        ModismoRelacion modismoRelacionado;
+        try {
+            JSONArray jModismosSimilares = json.getJSONArray("Modismos_Similares");
+            JSONObject jModismoSimilar;
+            for(int i=0; i<jModismosSimilares.length(); i++){
+                jModismoSimilar = jModismosSimilares.getJSONObject(i);
+                modismoRelacionado = new ModismoRelacion(jModismoSimilar.getInt("idModismo_2"), jModismoSimilar.getInt("idModismo_1"));
+                modismosRelacionados.add(modismoRelacionado);
+            }
+        }catch(JSONException ignore){}
         return modismosRelacionados.toArray(new ModismoRelacion[]{});
     }
 }

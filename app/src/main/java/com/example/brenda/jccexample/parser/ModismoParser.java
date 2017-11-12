@@ -29,7 +29,7 @@ public class ModismoParser {
         Modismo modismo;
         try{
             modismo = new Modismo(-1);
-            modismo.setIdModismo(RegexpProvider.getIntSequenceFromString(json.getString("idModismo")));
+            modismo.setIdModismo(json.getInt("idModismo"));
             modismo.setExpresion(json.getString("Expresion"));
             modismo.setPais(json.getInt("idPais"));
         }catch(JSONException e){

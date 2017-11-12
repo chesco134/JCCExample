@@ -49,4 +49,12 @@ public class ProveedorSolicitudes {
         }catch(JSONException ignore){}
         return json;
     }
+
+    public static JSONObject solicitudModismosRelacionados(Modismo modismo){
+        JSONObject json = new JSONObject();
+        try{
+            json.put("idModismo", modismo.getIdModismo());
+        }catch(JSONException ignore){}
+        return json;
+    }
 }

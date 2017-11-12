@@ -43,7 +43,6 @@ public class ListaPaisesFragment extends Fragment {
             purosNombresPaises.add(pais.getPais());
             Log.d("Chunchuncha", "Id Pais: " + pais.getIdPais() + ",\t" + pais.getPais());
         }
-        gridMenu.setAdapter(new MyRowListAdapter(context, purosNombresPaises));
         MyRowListAdapter adapter = new MyRowListAdapter(context, purosNombresPaises);
         gridMenu.setAdapter(adapter);
         return rootView;

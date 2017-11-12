@@ -31,9 +31,9 @@ public class EjemploParser {
         Ejemplo ejemplo;
         try{
             ejemplo = new Ejemplo(-1);
-            ejemplo.setIdEjemplo(RegexpProvider.getIntSequenceFromString(json.getString("idEjemplo")));
+            ejemplo.setIdEjemplo(json.getInt("idEjemplo"));
             ejemplo.setEjemplo(json.getString("Ejemplo"));
-            ejemplo.setIdModismo(RegexpProvider.getIntSequenceFromString(json.getString("idModismo")));
+            ejemplo.setIdModismo(json.getInt("idModismo"));
         }catch(JSONException e){
             e.printStackTrace();
             ejemplo = null;

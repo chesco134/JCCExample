@@ -81,7 +81,7 @@ public class AccionesLectura {
         DatoInteres datoInteres;
         while(c.moveToNext()){
             datoInteres = new DatoInteres();
-            datoInteres.setIdDatoInteres(c.getString(c.getColumnIndex("idDatoInteres")));
+            datoInteres.setIdDatoInteres(c.getInt(c.getColumnIndex("idDatoInteres")));
             datoInteres.setDatoInteres(c.getString(c.getColumnIndex("DatoInteres")));
             datoInteres.setPaisIdPais(c.getInt(c.getColumnIndex("Pais_idPais")));
             datosInteres.add(datoInteres);
@@ -98,7 +98,7 @@ public class AccionesLectura {
         DatoInteres datoInteres;
         while(c.moveToNext()){
             datoInteres = new DatoInteres();
-            datoInteres.setIdDatoInteres(c.getString(c.getColumnIndex("idDatoInteres")));
+            datoInteres.setIdDatoInteres(c.getInt(c.getColumnIndex("idDatoInteres")));
             datoInteres.setDatoInteres(c.getString(c.getColumnIndex("DatoInteres")));
             datoInteres.setPaisIdPais(pais.getIdPais());
             datosInteres.add(datoInteres);
@@ -114,7 +114,7 @@ public class AccionesLectura {
         DatoInteres datoInteres = null;
         if(c.moveToFirst()){
             datoInteres = new DatoInteres();
-            datoInteres.setIdDatoInteres(c.getString(c.getColumnIndex("idDatoInteres")));
+            datoInteres.setIdDatoInteres(c.getInt(c.getColumnIndex("idDatoInteres")));
             datoInteres.setDatoInteres(c.getString(c.getColumnIndex("DatoInteres")));
             datoInteres.setPaisIdPais(pais.getIdPais());
         }

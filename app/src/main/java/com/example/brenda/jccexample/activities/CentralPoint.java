@@ -257,6 +257,16 @@ public class CentralPoint extends AppCompatActivity
                                         AccionesEscritura.escribeDatoInteres(CentralPoint.this, datoInteres);
                                     }
                                 }catch(JSONException ignore){}
+                                try {
+                                    runOnUiThread(new Runnable(){
+                                        @Override
+                                        public void run(){
+                                            cambioDeFragmentConBackStack(new ListaPaisesFragment());
+                                        }
+                                    });
+                                }catch(IllegalStateException ex){
+                                    HAY_ERROR = false;
+                                }
                             }
 
                             @Override
@@ -294,14 +304,36 @@ public class CentralPoint extends AppCompatActivity
                                                     JSONObject respuesta = new JSONObject(content);
                                                     Ejemplo ejemplo;
                                                     Significado significado;
-                                                    ModismoRelacion[] modismosRelacionados;
                                                     ejemplo = EjemploParser.parseEjemplo(respuesta.getJSONObject("Ejemplo"));
                                                     AccionesEscritura.escribeEjemplo(CentralPoint.this, ejemplo);
                                                     significado = SignificadoParser.parseSignificado(respuesta.getJSONObject("Significado"));
                                                     AccionesEscritura.escribeSignificado(CentralPoint.this, significado);
-                                                    modismosRelacionados = ParseModismoRelacion.parseModismoRelacion(CentralPoint.this, respuesta.getJSONObject("Similar"));
-                                                    for(ModismoRelacion modismoRelacionado : modismosRelacionados)
-                                                        AccionesEscritura.escribeModismoRelacion(CentralPoint.this, modismoRelacionado);
+                                                    new ContactoConServidor(CentralPoint.this, 6, ProveedorSolicitudes.solicitudModismosRelacionados(AccionesLectura.obtenerModismo(CentralPoint.this, ejemplo.getIdModismo())), new ContactoConServidor.AccionContactoConServidor() {
+                                                        @Override
+                                                        public void accionPositiva(String content) {
+                                                            try {
+                                                                JSONObject respuesta = new JSONObject(content);
+                                                                ModismoRelacion[] modismosRelacionados;
+                                                                modismosRelacionados = ParseModismoRelacion.parseModismoRelacion(respuesta.getJSONObject("Similar"));
+                                                                for (ModismoRelacion modismoRelacionado : modismosRelacionados)
+                                                                    AccionesEscritura.escribeModismoRelacion(CentralPoint.this, modismoRelacionado);
+                                                            }catch(JSONException ignore){}
+                                                        }
+
+                                                        @Override
+                                                        public void accionNegativa(String content) {
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    try {
+                                                                        cambioDeFragmentConBackStack(new DummyDisplayFragment());
+                                                                    }catch(IllegalStateException ex){
+                                                                        HAY_ERROR = true;
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    }).start();
                                                 }catch(JSONException ignore){}
                                             }
 
@@ -337,16 +369,6 @@ public class CentralPoint extends AppCompatActivity
                                 });
                             }
                         }).start();
-                        try {
-                            runOnUiThread(new Runnable(){
-                                @Override
-                                public void run(){
-                           cambioDeFragmentConBackStack(new ListaPaisesFragment());
-                                }
-                            });
-                        }catch(IllegalStateException ex){
-                            HAY_ERROR = false;
-                        }
                         if(mlp.isConnected())
                             mlp.stopLocationUpdates();
                     }else{

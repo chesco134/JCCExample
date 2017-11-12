@@ -30,9 +30,9 @@ public class SignificadoParser {
         Significado significado;
         try{
             significado = new Significado(-1);
-            significado.setIdSignificado(RegexpProvider.getIntSequenceFromString(json.getString("idSignificado")));
+            significado.setIdSignificado(json.getInt("idSignificado"));
             significado.setSignificado(json.getString("Significado"));
-            significado.setIdModismo(RegexpProvider.getIntSequenceFromString(json.getString("idModismo")));
+            significado.setIdModismo(json.getInt("idModismo"));
         }catch(JSONException e){
             e.printStackTrace();
             significado = null;
