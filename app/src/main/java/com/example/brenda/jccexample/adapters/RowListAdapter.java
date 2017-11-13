@@ -37,13 +37,6 @@ public class RowListAdapter extends BaseAdapter {
         Collections.addAll(modismos, AccionesLectura.obtenerModismos(context));
     }
 
-    public RowListAdapter(Context context, Modismo[] modismos){
-        Log.d("Yeah", "We got here with modismos null?: " + (modismos == null));
-        this.context = context;
-        this.modismos = new ArrayList<>();
-        Collections.addAll(this.modismos, modismos);
-    }
-
     @Override
     public int getCount(){
         return modismos.size();

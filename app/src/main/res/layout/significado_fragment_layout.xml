@@ -3,39 +3,13 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/significado_fragment_layout_significado_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12sp"
-        android:layout_marginStart="12sp"
-        android:layout_marginLeft="12sp"
-        android:layout_marginEnd="12sp"
-        android:layout_marginRight="12sp"
-        android:text="@string/significado_fragment_layout_significado"
-        android:textStyle="bold"
-        />
-
-    <TextView
-        android:id="@+id/significado_fragment_layout_significado_value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/significado_fragment_layout_significado_label"
-        android:layout_alignStart="@+id/significado_fragment_layout_significado_label"
-        android:layout_alignLeft="@+id/significado_fragment_layout_significado_label"
-        android:layout_marginEnd="12sp"
-        android:layout_marginRight="12sp"
-        android:textSize="18sp"
-        />
-
-    <TextView
         android:id="@+id/significado_fragment_layout_ejemplo_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/significado_fragment_layout_significado_value"
-        android:layout_alignStart="@+id/significado_fragment_layout_significado_label"
-        android:layout_alignLeft="@+id/significado_fragment_layout_significado_label"
-        android:layout_alignRight="@+id/significado_fragment_layout_significado_label"
-        android:layout_alignEnd="@+id/significado_fragment_layout_significado_label"
+        android:layout_marginStart="12sp"
+        android:layout_marginLeft="12sp"
+        android:layout_marginRight="12sp"
+        android:layout_marginEnd="12sp"
         android:layout_marginTop="12sp"
         android:text="@string/significado_fragment_layout_ejemplo"
         android:textStyle="bold"
@@ -46,27 +20,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/significado_fragment_layout_ejemplo_label"
-        android:layout_alignStart="@+id/significado_fragment_layout_significado_label"
-        android:layout_alignLeft="@+id/significado_fragment_layout_significado_label"
+        android:layout_alignStart="@+id/significado_fragment_layout_ejemplo_label"
+        android:layout_alignLeft="@+id/significado_fragment_layout_ejemplo_label"
         android:layout_marginEnd="12sp"
         android:layout_marginRight="12sp"
         android:textSize="18sp"
         />
 
     <TextView
-        android:id="@+id/significado_fragment_layout_ver_relacionados"
+        android:id="@+id/significado_fragment_layout_relacionado_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12sp"
         android:layout_below="@+id/significado_fragment_layout_ejemplo_value"
-        android:layout_alignLeft="@+id/significado_fragment_layout_significado_label"
-        android:layout_alignStart="@+id/significado_fragment_layout_significado_label"
+        android:layout_alignStart="@+id/significado_fragment_layout_ejemplo_label"
+        android:layout_alignLeft="@+id/significado_fragment_layout_ejemplo_label"
         android:layout_marginEnd="12sp"
         android:layout_marginRight="12sp"
-        android:gravity="end"
-        android:text="@string/significado_fragment_layout_ver_relacionados"
-        android:textSize="16sp"
+        android:layout_marginTop="20sp"
         android:textStyle="bold"
+        android:text="@string/significado_fragment_relacionado_label"
+        />
+
+    <TextView
+        android:id="@+id/significado_fragment_layout_relacionado_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/significado_fragment_layout_relacionado_label"
+        android:layout_alignLeft="@+id/significado_fragment_layout_ejemplo_label"
+        android:layout_alignStart="@+id/significado_fragment_layout_ejemplo_label"
+        android:layout_marginEnd="12sp"
+        android:layout_marginRight="12sp"
+        android:textSize="18sp"
         />
 
 </RelativeLayout>

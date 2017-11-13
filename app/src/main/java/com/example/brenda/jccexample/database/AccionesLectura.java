@@ -11,6 +11,7 @@ import com.example.brenda.jccexample.pojo.Modismo;
 import com.example.brenda.jccexample.pojo.ModismoRelacion;
 import com.example.brenda.jccexample.pojo.Pais;
 import com.example.brenda.jccexample.pojo.Significado;
+import com.example.brenda.jccexample.pojo.Similar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -199,6 +200,15 @@ public class AccionesLectura {
         c.close();
         db.close();
         return ejemplo;
+    }
+
+    public static Similar obtenerSimilar(Context context, Modismo modismo){
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select * from Similar where idModismo = cast(? as integer)", new String[]{String.valueOf(modismo.getIdModismo())});
+        Similar similar = c.moveToFirst() ? new Similar(c.getInt(c.getColumnIndex("idSimilar")), c.getString(c.getColumnIndex("Similar")), modismo.getIdModismo()) : new Similar(-1);
+        c.close();
+        db.close();
+        return similar;
     }
 
     public static ModismoRelacion[] obtenerModismosSimilares(Context context, Modismo modismo){

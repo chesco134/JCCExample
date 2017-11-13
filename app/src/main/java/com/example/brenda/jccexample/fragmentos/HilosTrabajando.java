@@ -55,7 +55,6 @@ public class HilosTrabajando extends android.support.v4.app.Fragment {
                 hilosTrabajando.remove(ccs.getStatusId());
                 statusIds.remove(ccs.getStatusId());
                 ((CentralPoint) context).removeHiloTrabajando(ccs);
-                list.deferNotifyDataSetChanged();
             }
         });
         return rootView;

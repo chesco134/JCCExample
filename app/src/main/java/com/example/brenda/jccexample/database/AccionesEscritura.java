@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.example.brenda.jccexample.pojo.DatoInteres;
@@ -12,6 +13,7 @@ import com.example.brenda.jccexample.pojo.Modismo;
 import com.example.brenda.jccexample.pojo.ModismoRelacion;
 import com.example.brenda.jccexample.pojo.Pais;
 import com.example.brenda.jccexample.pojo.Significado;
+import com.example.brenda.jccexample.pojo.Similar;
 
 /**
  * Created by Brenda on 08/03/2017.
@@ -65,6 +67,16 @@ public class AccionesEscritura {
         values.put("Ejemplo", ejemplo.getEjemplo());
         values.put("idModismo", ejemplo.getIdModismo());
         try{ db.insert("Ejemplo", "---", values); } catch(SQLiteConstraintException ignore){ }
+        db.close();
+    }
+
+    public static void escribeSimilar(Context context, Similar similar){
+        SQLiteDatabase db = new MyDB(context).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("idSimilar", similar.getIdSimilar());
+        values.put("Similar", similar.getSimilar());
+        values.put("idModismo", similar.getIdModismo());
+        try{ db.insert("Similar", "---", values); Log.e("Barra", "Inserted: " + similar.getSimilar()); }catch(SQLiteConstraintException ignore){ignore.printStackTrace(); }
         db.close();
     }
 

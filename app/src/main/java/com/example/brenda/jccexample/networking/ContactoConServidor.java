@@ -40,7 +40,7 @@ public class ContactoConServidor extends Thread {
             String host;
             con = // 10.0.2.2
                     (java.net.HttpURLConnection) new java.net.URL(customURL = "http://"+ ("NaN".equals(host = ProveedorDeRecursos.obtenerRecursoString(context, "host")) ? "192.168.0.21" : host)+":8080/BMLSampleUnit/Hurricane").openConnection();
-            Log.d("ContactoConServidor", "Connecting to: " + customURL);
+//            Log.d("ContactoConServidor", "Connecting to: " + customURL);
             con.setDoOutput(true);
             salida = new java.io.DataOutputStream(con.getOutputStream());
             json.put("action", action);
@@ -76,7 +76,7 @@ public class ContactoConServidor extends Thread {
         }catch(java.io.IOException e){
             e.printStackTrace();
             status = e.getMessage();
-        }
+        }catch(NullPointerException ignore){ }
         Log.e("ContactoConServidor", "Conexión detenida: " + json.toString());
     }
 

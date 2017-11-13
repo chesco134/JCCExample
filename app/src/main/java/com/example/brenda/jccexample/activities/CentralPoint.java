@@ -41,12 +41,14 @@ import com.example.brenda.jccexample.parser.ModismoParser;
 import com.example.brenda.jccexample.parser.PaisParser;
 import com.example.brenda.jccexample.parser.ParseModismoRelacion;
 import com.example.brenda.jccexample.parser.SignificadoParser;
+import com.example.brenda.jccexample.parser.SimilarParser;
 import com.example.brenda.jccexample.pojo.DatoInteres;
 import com.example.brenda.jccexample.pojo.Ejemplo;
 import com.example.brenda.jccexample.pojo.Modismo;
 import com.example.brenda.jccexample.pojo.ModismoRelacion;
 import com.example.brenda.jccexample.pojo.Pais;
 import com.example.brenda.jccexample.pojo.Significado;
+import com.example.brenda.jccexample.pojo.Similar;
 import com.example.brenda.jccexample.proveedores.ProveedorSolicitudes;
 
 import org.json.JSONArray;
@@ -62,6 +64,7 @@ public class CentralPoint extends AppCompatActivity
 
     private static final int SPEECH_REQUEST_CODE = 0;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 18;
+    private static final int ACTIVIDAD_DE_ESPERA = 134;
 
     private int isFirstTime = 0;
     private boolean secondTime;
@@ -130,8 +133,8 @@ public class CentralPoint extends AppCompatActivity
             HAY_ERROR = false;
         }
         else
-            if(AccionesLectura.obtenerPaises(this).length != 0)
-       cambioDeFragmentConBackStack(new ListaPaisesFragment());
+        if(AccionesLectura.obtenerPaises(this).length != 0)
+            cambioDeFragmentConBackStack(new ListaPaisesFragment());
 
     }
 
@@ -148,7 +151,8 @@ public class CentralPoint extends AppCompatActivity
             }else
                 if(isFirstTime == 1) {
                     isFirstTime++;
-                    performLocationCheck();
+                    if(AccionesLectura.obtenerPaises(this).length == 0)
+                        performLocationCheck();
                 }
         }
         actualizaNavigationView();
@@ -195,7 +199,8 @@ public class CentralPoint extends AppCompatActivity
             return true;
         }else if(itemId == R.id.action_update_database){
             new MyDB(this).onUpgrade(new MyDB(this).getWritableDatabase(), 1, 2);
-            actualizaNavigationView();
+            cambioDeFragment(new ListaPaisesFragment());
+            onBackPressed();
             return true;
         }else if(itemId == R.id.action_lookup_hilos_trabajando){
             htf = new HilosTrabajando();
@@ -207,9 +212,6 @@ public class CentralPoint extends AppCompatActivity
 
     public void removeHiloTrabajando(ContactoConServidor ccs){
         WORKERS.remove(ccs);
-        if(htf != null && htf.isVisible()){
-            htf.workerRemoved(ccs);
-        }
     }
 
     private void cambioDeFragment(Fragment fragment){
@@ -261,8 +263,18 @@ public class CentralPoint extends AppCompatActivity
         et.show(getSupportFragmentManager(), "Entrada Texto");
     }
 
+    public void displayWaitingActivity(String message){
+        Intent i = new Intent(this, ActividadDeEspera.class);
+        i.putExtra("message", message);
+        startActivityForResult(i, ACTIVIDAD_DE_ESPERA);
+    }
+
+    public void dismissWaitingActivity(){
+        finishActivity(ACTIVIDAD_DE_ESPERA);
+    }
+
     public void updateLocationData(double latitud, double longitud) {
-        Log.d("ULD", "Requesting location data.\t" + ProveedorDeRecursos.obtenerRecursoString(this, "host"));
+//        Log.d("ULD", "Requesting location data.\t" + ProveedorDeRecursos.obtenerRecursoString(this, "host"));
         ccs = new ContactoConServidor(this, 3/*1*/, ProveedorSolicitudes.solicitudPais(latitud, longitud)/*ProveedorSolicitudes.solicitudSimple()*/, new ContactoConServidor.AccionContactoConServidor() {
             @Override
             public void accionPositiva(String content) {
@@ -318,7 +330,7 @@ public class CentralPoint extends AppCompatActivity
                         ccs3 = new ContactoConServidor(CentralPoint.this, 4, ProveedorSolicitudes.solicitudModismos(pais), new ContactoConServidor.AccionContactoConServidor() {
                             @Override
                             public void accionPositiva(String content) {
-                                Log.d("ULD", "Got: " + content);
+//                                Log.d("ULD", "Got: " + content);
                                 try{
                                     JSONObject response = new JSONObject(content);
                                     JSONArray jModismos = response.getJSONArray("Modismos");
@@ -331,45 +343,18 @@ public class CentralPoint extends AppCompatActivity
                                         ccs4 = new ContactoConServidor(CentralPoint.this, 5, ProveedorSolicitudes.solicitudInformacionModismo(modismo), new ContactoConServidor.AccionContactoConServidor() {
                                             @Override
                                             public void accionPositiva(String content) {
-                                                Log.d("ULD", "Got: " + content);
+//                                                Log.d("ULD", "Got: " + content);
                                                 try{
                                                     JSONObject respuesta = new JSONObject(content);
                                                     Ejemplo ejemplo;
                                                     Significado significado;
+                                                    Similar similar;
                                                     ejemplo = EjemploParser.parseEjemplo(respuesta.getJSONObject("Ejemplo"));
                                                     AccionesEscritura.escribeEjemplo(CentralPoint.this, ejemplo);
+                                                    similar = SimilarParser.parseSimilar(respuesta.getJSONObject("Similar"));
+                                                    AccionesEscritura.escribeSimilar(CentralPoint.this, similar);
                                                     significado = SignificadoParser.parseSignificado(respuesta.getJSONObject("Significado"));
                                                     AccionesEscritura.escribeSignificado(CentralPoint.this, significado);
-                                                    ccs5 = new ContactoConServidor(CentralPoint.this, 6, ProveedorSolicitudes.solicitudModismosRelacionados(AccionesLectura.obtenerModismo(CentralPoint.this, ejemplo.getIdModismo())), new ContactoConServidor.AccionContactoConServidor() {
-                                                        @Override
-                                                        public void accionPositiva(String content) {
-                                                            try {
-                                                                JSONObject respuesta = new JSONObject(content);
-                                                                ModismoRelacion[] modismosRelacionados;
-                                                                modismosRelacionados = ParseModismoRelacion.parseModismoRelacion(respuesta.getJSONObject("Similar"));
-                                                                for (ModismoRelacion modismoRelacionado : modismosRelacionados)
-                                                                    AccionesEscritura.escribeModismoRelacion(CentralPoint.this, modismoRelacionado);
-                                                            }catch(JSONException ignore){}
-                                                            removeHiloTrabajando(ccs5);
-                                                        }
-
-                                                        @Override
-                                                        public void accionNegativa(String content) {
-                                                            runOnUiThread(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    try {
-                                                                        cambioDeFragmentConBackStack(new DummyDisplayFragment());
-                                                                    }catch(IllegalStateException ex){
-                                                                        HAY_ERROR = true;
-                                                                    }
-                                                                }
-                                                            });
-                                                            removeHiloTrabajando(ccs5);
-                                                        }
-                                                    });
-                                                    ccs5.start();
-                                                    WORKERS.add(ccs5);
                                                 }catch(JSONException ignore){}
                                                 removeHiloTrabajando(ccs4);
                                             }
@@ -391,6 +376,36 @@ public class CentralPoint extends AppCompatActivity
                                         });
                                         ccs4.start();
                                         WORKERS.add(ccs4);
+                                        ccs5 = new ContactoConServidor(CentralPoint.this, 6, ProveedorSolicitudes.solicitudModismosRelacionados(modismo), new ContactoConServidor.AccionContactoConServidor() {
+                                            @Override
+                                            public void accionPositiva(String content) {
+                                                try {
+                                                    JSONObject respuesta = new JSONObject(content);
+                                                    ModismoRelacion[] modismosRelacionados;
+                                                    modismosRelacionados = ParseModismoRelacion.parseModismoRelacion(respuesta);
+                                                    for (ModismoRelacion modismoRelacionado : modismosRelacionados)
+                                                        AccionesEscritura.escribeModismoRelacion(CentralPoint.this, modismoRelacionado);
+                                                }catch(JSONException ignore){}
+                                                removeHiloTrabajando(ccs5);
+                                            }
+
+                                            @Override
+                                            public void accionNegativa(String content) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            cambioDeFragmentConBackStack(new DummyDisplayFragment());
+                                                        }catch(IllegalStateException ex){
+                                                            HAY_ERROR = true;
+                                                        }
+                                                    }
+                                                });
+                                                removeHiloTrabajando(ccs5);
+                                            }
+                                        });
+//                                        ccs5.start();
+//                                        WORKERS.add(ccs5);
                                     }
                                 }catch(JSONException ignore){}
                                 removeHiloTrabajando(ccs3);
@@ -553,6 +568,8 @@ public class CentralPoint extends AppCompatActivity
             String spokenText = results.get(0);
             // Do something with spokenText
             mainTextView.setText(spokenText);
+        }else if(requestCode == ACTIVIDAD_DE_ESPERA && resultCode != RESULT_OK){
+//            onBackPressed();
         }
         Log.d("Atún", "Request code: " + requestCode + ", resultCode: " + resultCode + ", data? " + (data != null) + " $$ " + RESULT_OK);
 

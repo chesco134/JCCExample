@@ -6,11 +6,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.brenda.jccexample.R;
 import com.example.brenda.jccexample.adapters.RowListAdapter;
 import com.example.brenda.jccexample.pojo.Modismo;
+import com.example.brenda.jccexample.pojo.Similar;
 
 /**
  * Created by jcapiz on 9/10/17.
@@ -19,7 +21,7 @@ import com.example.brenda.jccexample.pojo.Modismo;
 public class SimpleListFragment extends Fragment {
 
     private Context context;
-    private Modismo[] modismos;
+    private String[] modismos;
 
     @Override
     public void onAttach(Context context){
@@ -32,16 +34,16 @@ public class SimpleListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.simple_list_view, parent, false);
         ListView listView = (ListView) rootView.findViewById(R.id.simple_list_view_list);
         Bundle args;
-        modismos = (Modismo[]) (savedInstanceState == null ? ((args = getArguments()) != null ? args.getSerializable("modismos") : null) : savedInstanceState.getSerializable("modismos"));
-        if(modismos != null)
-            listView.setAdapter(new RowListAdapter(context, modismos));
-        else
+        modismos = (savedInstanceState == null ? ((args = getArguments()) != null ? args.getStringArray("modismos") : null) : savedInstanceState.getStringArray("modismos"));
+        if(modismos != null) {
+            listView.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, modismos));
+        }else
             listView.setAdapter(new RowListAdapter(context));
         return rootView;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState){
-        outState.putSerializable("modismos", modismos);
+        outState.putStringArray("modismos", modismos);
     }
 }

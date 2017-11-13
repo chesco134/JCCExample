@@ -3,6 +3,8 @@ package com.example.brenda.jccexample.fragmentos;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.example.brenda.jccexample.activities.SimpleListShowActivity;
 import com.example.brenda.jccexample.database.AccionesLectura;
 import com.example.brenda.jccexample.pojo.Modismo;
 import com.example.brenda.jccexample.pojo.ModismoRelacion;
+import com.example.brenda.jccexample.pojo.Similar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,21 +40,25 @@ public class SignificadoListFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.significado_fragment_layout, parent, false);
         idModismo = savedInstanceState == null ? getArguments().getInt("idModismo") : savedInstanceState.getInt("idModismo");
         final Modismo modismo;
-        ((TextView)rootView.findViewById(R.id.significado_fragment_layout_significado_value)).setText(AccionesLectura.obtenerSignificado(context, modismo = AccionesLectura.obtenerModismo(context, idModismo)).getSignificado());
+        modismo = AccionesLectura.obtenerModismo(context, idModismo);
+        ((AppCompatActivity)context).getSupportActionBar().setTitle(modismo.getExpresion());
         ((TextView)rootView.findViewById(R.id.significado_fragment_layout_ejemplo_value)).setText(AccionesLectura.obtenerEjemplo(context, modismo).getEjemplo());
-        rootView.findViewById(R.id.significado_fragment_layout_ver_relacionados).setOnClickListener(new View.OnClickListener(){
+        Similar similar = AccionesLectura.obtenerSimilar(context, modismo);
+        ((TextView)rootView.findViewById(R.id.significado_fragment_layout_relacionado_value)).setText((null == similar.getSimilar() ? getString(R.string.no_modismos_relacionados) : similar.getSimilar()));
+        /*rootView.findViewById(R.id.significado_fragment_layout_ver_relacionados).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                List<Modismo> modismos = new ArrayList<>();
-                for(ModismoRelacion mr : AccionesLectura.obtenerModismosSimilares(context, modismo))
-                    modismos.add(AccionesLectura.obtenerModismo(context, mr.getIdModismo2()));
+                List<String> modismos = new ArrayList<>();
+                Similar similar = AccionesLectura.obtenerSimilar(context, modismo);
+                modismos.add(similar.getSimilar());
+                Log.e("Significado", "Added: " + similar.getSimilar());
                 Bundle args = new Bundle();
-                args.putSerializable("modismos", modismos.toArray(new Modismo[]{}));
+                args.putStringArray("modismos", modismos.toArray(new String[]{}));
                 SimpleListFragment slf = new SimpleListFragment();
                 slf.setArguments(args);
                 ((SimpleListShowActivity)context).changeFragmentWithBackstack(slf);
             }
-        });
+        });*/
         return rootView;
     }
 

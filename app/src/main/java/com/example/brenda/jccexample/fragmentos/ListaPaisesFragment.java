@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.example.brenda.jccexample.R;
+import com.example.brenda.jccexample.activities.CentralPoint;
 import com.example.brenda.jccexample.adapters.MyRowListAdapter;
 import com.example.brenda.jccexample.database.AccionesLectura;
 import com.example.brenda.jccexample.pojo.Pais;
@@ -45,6 +46,7 @@ public class ListaPaisesFragment extends Fragment {
         }
         MyRowListAdapter adapter = new MyRowListAdapter(context, purosNombresPaises);
         gridMenu.setAdapter(adapter);
+        ((CentralPoint)context).dismissWaitingActivity();
         return rootView;
     }
 }

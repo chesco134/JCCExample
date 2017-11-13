@@ -107,6 +107,7 @@ public class MyRowListAdapter extends BaseAdapter {
 
         @Override
         public void onClick(View view){
+            ((CentralPoint)context).displayWaitingActivity(context.getString(R.string.cargando_datos_interes));
             Pais p;
             ProveedorDeRecursos.guardaRecursoString(context, ProveedorDeRecursos.PAIS_ACTUAL, pais);
             DatoInteres[] datosInteres = AccionesLectura.obtenerDatosInteresPais(context, p = AccionesLectura.obtenerPais(context, pais));

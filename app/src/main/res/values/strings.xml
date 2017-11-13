@@ -65,4 +65,8 @@
     <string name="significado_fragment_layout_ver_relacionados">Ver relacionados</string>
     <string name="action_update_database">Update DB</string>
     <string name="action_lookup_hilos_trabajando">Hilos</string>
+    <string name="cargando_datos_interes">\"Cargando Datos de Interés\"</string>
+    <string name="on_back_pressed_message">Presione nuevamente para cancelar.</string>
+    <string name="no_modismos_relacionados">No hay modismos relacionados por el momento.</string>
+    <string name="significado_fragment_relacionado_label">Relacionado:</string>
 </resources>
