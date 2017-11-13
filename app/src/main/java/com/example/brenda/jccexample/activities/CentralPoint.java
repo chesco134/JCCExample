@@ -30,6 +30,7 @@ import com.example.brenda.jccexample.database.MyDB;
 import com.example.brenda.jccexample.dialogos.EntradaTexto;
 import com.example.brenda.jccexample.dialogos.ProveedorToast;
 import com.example.brenda.jccexample.fragmentos.DummyDisplayFragment;
+import com.example.brenda.jccexample.fragmentos.HilosTrabajando;
 import com.example.brenda.jccexample.fragmentos.ListaPaisesFragment;
 import com.example.brenda.jccexample.fragmentos.SimpleFragment;
 import com.example.brenda.jccexample.gps.MyLocationProvider;
@@ -52,6 +53,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CentralPoint extends AppCompatActivity
@@ -70,6 +72,15 @@ public class CentralPoint extends AppCompatActivity
     private String message;
     private View root;
     private MyLocationProvider mlp;
+
+    public static volatile List<ContactoConServidor> WORKERS = new ArrayList<ContactoConServidor>();
+    private ContactoConServidor ccs;
+    private ContactoConServidor ccs2;
+    private ContactoConServidor ccs3;
+    private ContactoConServidor ccs4;
+    private ContactoConServidor ccs5;
+
+    private HilosTrabajando htf = null; // HilosTrabajandoFragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,9 +195,21 @@ public class CentralPoint extends AppCompatActivity
             return true;
         }else if(itemId == R.id.action_update_database){
             new MyDB(this).onUpgrade(new MyDB(this).getWritableDatabase(), 1, 2);
+            actualizaNavigationView();
+            return true;
+        }else if(itemId == R.id.action_lookup_hilos_trabajando){
+            htf = new HilosTrabajando();
+            cambioDeFragmentConBackStack(htf);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void removeHiloTrabajando(ContactoConServidor ccs){
+        WORKERS.remove(ccs);
+        if(htf != null && htf.isVisible()){
+            htf.workerRemoved(ccs);
+        }
     }
 
     private void cambioDeFragment(Fragment fragment){
@@ -240,7 +263,7 @@ public class CentralPoint extends AppCompatActivity
 
     public void updateLocationData(double latitud, double longitud) {
         Log.d("ULD", "Requesting location data.\t" + ProveedorDeRecursos.obtenerRecursoString(this, "host"));
-        new ContactoConServidor(this, 3/*1*/, ProveedorSolicitudes.solicitudPais(latitud, longitud)/*ProveedorSolicitudes.solicitudSimple()*/, new ContactoConServidor.AccionContactoConServidor() {
+        ccs = new ContactoConServidor(this, 3/*1*/, ProveedorSolicitudes.solicitudPais(latitud, longitud)/*ProveedorSolicitudes.solicitudSimple()*/, new ContactoConServidor.AccionContactoConServidor() {
             @Override
             public void accionPositiva(String content) {
                 Log.d("ULD", "Got: " + content);
@@ -250,7 +273,7 @@ public class CentralPoint extends AppCompatActivity
                         Pais pais;
                         ProveedorDeRecursos.guardaRecursoString(CentralPoint.this, ProveedorDeRecursos.PAIS_ACTUAL, PaisParser.parsePais(json.getJSONObject("Pais")).getPais());
                         AccionesEscritura.escribePais(CentralPoint.this, pais = PaisParser.parsePais(json.getJSONObject("Pais")));
-                        new ContactoConServidor(CentralPoint.this, 2, ProveedorSolicitudes.solicitudDatoInteres(pais), new ContactoConServidor.AccionContactoConServidor() {
+                        ccs2 = new ContactoConServidor(CentralPoint.this, 2, ProveedorSolicitudes.solicitudDatoInteres(pais), new ContactoConServidor.AccionContactoConServidor() {
                             @Override
                             public void accionPositiva(String content) {
                                 try {
@@ -272,6 +295,7 @@ public class CentralPoint extends AppCompatActivity
                                 }catch(IllegalStateException ex){
                                     HAY_ERROR = false;
                                 }
+                                removeHiloTrabajando(ccs2);
                             }
 
                             @Override
@@ -286,9 +310,12 @@ public class CentralPoint extends AppCompatActivity
                                         }
                                     }
                                 });
+                                removeHiloTrabajando(ccs2);
                             }
-                        }).start();
-                        new ContactoConServidor(CentralPoint.this, 4, ProveedorSolicitudes.solicitudModismos(pais), new ContactoConServidor.AccionContactoConServidor() {
+                        });
+                        ccs2.start();
+                        WORKERS.add(ccs2);
+                        ccs3 = new ContactoConServidor(CentralPoint.this, 4, ProveedorSolicitudes.solicitudModismos(pais), new ContactoConServidor.AccionContactoConServidor() {
                             @Override
                             public void accionPositiva(String content) {
                                 Log.d("ULD", "Got: " + content);
@@ -301,7 +328,7 @@ public class CentralPoint extends AppCompatActivity
                                         jModismo = jModismos.getJSONObject(i);
                                         modismo = ModismoParser.parseModismo(jModismo);
                                         AccionesEscritura.escribeModismo(CentralPoint.this, modismo);
-                                        new ContactoConServidor(CentralPoint.this, 5, ProveedorSolicitudes.solicitudInformacionModismo(modismo), new ContactoConServidor.AccionContactoConServidor() {
+                                        ccs4 = new ContactoConServidor(CentralPoint.this, 5, ProveedorSolicitudes.solicitudInformacionModismo(modismo), new ContactoConServidor.AccionContactoConServidor() {
                                             @Override
                                             public void accionPositiva(String content) {
                                                 Log.d("ULD", "Got: " + content);
@@ -313,7 +340,7 @@ public class CentralPoint extends AppCompatActivity
                                                     AccionesEscritura.escribeEjemplo(CentralPoint.this, ejemplo);
                                                     significado = SignificadoParser.parseSignificado(respuesta.getJSONObject("Significado"));
                                                     AccionesEscritura.escribeSignificado(CentralPoint.this, significado);
-                                                    new ContactoConServidor(CentralPoint.this, 6, ProveedorSolicitudes.solicitudModismosRelacionados(AccionesLectura.obtenerModismo(CentralPoint.this, ejemplo.getIdModismo())), new ContactoConServidor.AccionContactoConServidor() {
+                                                    ccs5 = new ContactoConServidor(CentralPoint.this, 6, ProveedorSolicitudes.solicitudModismosRelacionados(AccionesLectura.obtenerModismo(CentralPoint.this, ejemplo.getIdModismo())), new ContactoConServidor.AccionContactoConServidor() {
                                                         @Override
                                                         public void accionPositiva(String content) {
                                                             try {
@@ -323,6 +350,7 @@ public class CentralPoint extends AppCompatActivity
                                                                 for (ModismoRelacion modismoRelacionado : modismosRelacionados)
                                                                     AccionesEscritura.escribeModismoRelacion(CentralPoint.this, modismoRelacionado);
                                                             }catch(JSONException ignore){}
+                                                            removeHiloTrabajando(ccs5);
                                                         }
 
                                                         @Override
@@ -337,9 +365,13 @@ public class CentralPoint extends AppCompatActivity
                                                                     }
                                                                 }
                                                             });
+                                                            removeHiloTrabajando(ccs5);
                                                         }
-                                                    }).start();
+                                                    });
+                                                    ccs5.start();
+                                                    WORKERS.add(ccs5);
                                                 }catch(JSONException ignore){}
+                                                removeHiloTrabajando(ccs4);
                                             }
 
                                             @Override
@@ -354,10 +386,14 @@ public class CentralPoint extends AppCompatActivity
                                                         }
                                                     }
                                                 });
+                                                removeHiloTrabajando(ccs4);
                                             }
-                                        }).start();
+                                        });
+                                        ccs4.start();
+                                        WORKERS.add(ccs4);
                                     }
                                 }catch(JSONException ignore){}
+                                removeHiloTrabajando(ccs3);
                             }
 
                             @Override
@@ -372,8 +408,11 @@ public class CentralPoint extends AppCompatActivity
                                         }
                                     }
                                 });
+                                removeHiloTrabajando(ccs3);
                             }
-                        }).start();
+                        });
+                        ccs3.start();
+                        removeHiloTrabajando(ccs3);
                         if(mlp.isConnected())
                             mlp.stopLocationUpdates();
                     }else{
@@ -428,8 +467,11 @@ public class CentralPoint extends AppCompatActivity
                 });
                 if(mlp.isConnected())
                     mlp.stopLocationUpdates();
+                removeHiloTrabajando(ccs);
             }
-        }).start();
+        });
+        WORKERS.add(ccs);
+        ccs.start();
     }
 
     public void setLatitudeText(String s) {

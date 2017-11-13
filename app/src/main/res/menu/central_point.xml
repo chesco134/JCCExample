@@ -24,4 +24,10 @@
         android:orderInCategory="100"
         android:title="@string/action_update_database"
         app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/action_lookup_hilos_trabajando"
+        android:orderInCategory="100"
+        android:title="@string/action_lookup_hilos_trabajando"
+        app:showAsAction="collapseActionView" />
 </menu>

@@ -26,29 +26,29 @@ public class MyDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table Pais(" +
-                "        idPais integer not null primary key autoincrement," +
+                "        idPais integer not null primary key," +
                 "        pais TEXT not null" +
                 ")");
         db.execSQL("create table DatoInteres(" +
-                "        idDatoInteres integer not null primary key autoincrement," +
+                "        idDatoInteres integer not null primary key," +
                 "        DatoInteres TEXT not null," +
                 "        Pais_idPais integer not null," +
                 "        foreign key(Pais_idPais) references Pais(idPais) on delete cascade on update cascade" +
                 ")");
         db.execSQL("create table Modismo(" +
-                "        idModismo integer not null primary key autoincrement," +
+                "        idModismo integer not null primary key," +
                 "        Expresion TEXT not null," +
                 "        idPais integer not null," +
                 "        foreign key(idPais) references Pais(idPais) on delete cascade on update cascade" +
                 ")");
         db.execSQL("create table Significado(" +
-                "        idSignificado integer not null primary key autoincrement," +
+                "        idSignificado integer not null primary key," +
                 "        Significado text not null," +
                 "        idModismo integer not null," +
                 "        foreign key(idModismo) references Modismo(idModismo) on delete cascade on update cascade" +
                 ")");
         db.execSQL("create table Ejemplo(" +
-                "        idEjemplo integer not null primary key autoincrement," +
+                "        idEjemplo integer not null primary key," +
                 "        Ejemplo text not null," +
                 "        idModismo integer not null," +
                 "        foreign key(idModismo) references Modismo(idModismo) on delete cascade on update cascade" +
@@ -74,29 +74,29 @@ public class MyDB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS `Pais`");
 
         db.execSQL("create table Pais(" +
-                "        idPais integer not null primary key autoincrement," +
+                "        idPais integer not null primary key," +
                 "        pais TEXT not null" +
                 ")");
         db.execSQL("create table DatoInteres(" +
-                "        idDatoInteres integer not null primary key autoincrement," +
+                "        idDatoInteres integer not null primary key," +
                 "        DatoInteres TEXT not null," +
                 "        Pais_idPais integer not null," +
                 "        foreign key(Pais_idPais) references Pais(idPais) on delete cascade on update cascade" +
                 ")");
         db.execSQL("create table Modismo(" +
-                "        idModismo integer not null primary key autoincrement," +
+                "        idModismo integer not null primary key," +
                 "        Expresion TEXT not null," +
                 "        idPais integer not null," +
                 "        foreign key(idPais) references Pais(idPais) on delete cascade on update cascade" +
                 ")");
         db.execSQL("create table Significado(" +
-                "        idSignificado integer not null primary key autoincrement," +
+                "        idSignificado integer not null primary key," +
                 "        Significado text not null," +
                 "        idModismo integer not null," +
                 "        foreign key(idModismo) references Modismo(idModismo) on delete cascade on update cascade" +
                 ")");
         db.execSQL("create table Ejemplo(" +
-                "        idEjemplo integer not null primary key autoincrement," +
+                "        idEjemplo integer not null primary key," +
                 "        Ejemplo text not null," +
                 "        idModismo integer not null," +
                 "        foreign key(idModismo) references Modismo(idModismo) on delete cascade on update cascade" +

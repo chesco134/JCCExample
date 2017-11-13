@@ -64,4 +64,5 @@
     <string name="significado_fragment_layout_ejemplo">Ejemplo:</string>
     <string name="significado_fragment_layout_ver_relacionados">Ver relacionados</string>
     <string name="action_update_database">Update DB</string>
+    <string name="action_lookup_hilos_trabajando">Hilos</string>
 </resources>

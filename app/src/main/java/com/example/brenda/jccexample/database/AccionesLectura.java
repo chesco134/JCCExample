@@ -39,7 +39,8 @@ public class AccionesLectura {
     public static Pais obtenerPais(Context context, String pais){
         SQLiteDatabase db = new MyDB(context).getReadableDatabase();
         Cursor c = db.rawQuery("select * from Pais where pais = ?", new String[]{pais});
-        Pais _pais = null;
+        Pais _pais = new Pais();
+        _pais.setIdPais(-1);
         if(c.moveToFirst()){
             _pais = new Pais();
             _pais.setIdPais(c.getInt(c.getColumnIndex("idPais")));
@@ -111,7 +112,8 @@ public class AccionesLectura {
     public static DatoInteres obtenerDatoInteresPais(Context context, Pais pais){
         SQLiteDatabase db = new MyDB(context).getReadableDatabase();
         Cursor c = db.rawQuery("select * from DatoInteres where Pais_idPais = ?", new String[]{String.valueOf(pais.getIdPais())});
-        DatoInteres datoInteres = null;
+        DatoInteres datoInteres = new DatoInteres();
+        datoInteres.setIdDatoInteres(-1);
         if(c.moveToFirst()){
             datoInteres = new DatoInteres();
             datoInteres.setIdDatoInteres(c.getInt(c.getColumnIndex("idDatoInteres")));
@@ -166,7 +168,7 @@ public class AccionesLectura {
         SQLiteDatabase db = new MyDB(context).getReadableDatabase();
         Cursor c = db.rawQuery("select * from Modismo where idModismo = cast(? as integer)", new String[] {String.valueOf(idModismo)});
         Modismo modismo;
-        modismo = c.moveToFirst() ? new Modismo(idModismo, c.getString(c.getColumnIndex("Expresion")), c.getInt(c.getColumnIndex("idPais"))) : null;
+        modismo = c.moveToFirst() ? new Modismo(idModismo, c.getString(c.getColumnIndex("Expresion")), c.getInt(c.getColumnIndex("idPais"))) : new Modismo(-1);
         c.close();
         db.close();
         return modismo;
@@ -175,7 +177,7 @@ public class AccionesLectura {
     public static Modismo obtenerModismo(Context context, String expresion){
         SQLiteDatabase db = new MyDB(context).getReadableDatabase();
         Cursor c = db.rawQuery("select * from Modismo where Expresion = ?", new String[]{expresion});
-        Modismo modismo = c.moveToFirst() ? new Modismo(c.getInt(c.getColumnIndex("idModismo")), expresion, c.getInt(c.getColumnIndex("idPais"))) : null;
+        Modismo modismo = c.moveToFirst() ? new Modismo(c.getInt(c.getColumnIndex("idModismo")), expresion, c.getInt(c.getColumnIndex("idPais"))) : new Modismo(-1);
         c.close();
         db.close();
         return modismo;
@@ -184,7 +186,7 @@ public class AccionesLectura {
     public static Significado obtenerSignificado(Context context, Modismo modismo){
         SQLiteDatabase db = new MyDB(context).getReadableDatabase();
         Cursor c = db.rawQuery("select * from Significado where idModismo = cast(? as integer)", new String[] {String.valueOf(modismo.getIdModismo())});
-        Significado significado = c.moveToFirst() ? new Significado(c.getInt(c.getColumnIndex("idSignificado")), c.getString(c.getColumnIndex("Significado")), modismo.getIdModismo()) : null;
+        Significado significado = c.moveToFirst() ? new Significado(c.getInt(c.getColumnIndex("idSignificado")), c.getString(c.getColumnIndex("Significado")), modismo.getIdModismo()) : new Significado(-1);
         c.close();
         db.close();
         return significado;
@@ -193,7 +195,7 @@ public class AccionesLectura {
     public static Ejemplo obtenerEjemplo(Context context, Modismo modismo){
         SQLiteDatabase db = new MyDB(context).getReadableDatabase();
         Cursor c = db.rawQuery("select * from Ejemplo where idModismo = cast(? as integer)", new String[]{String.valueOf(modismo.getIdModismo())});
-        Ejemplo ejemplo = c.moveToFirst() ? new Ejemplo(c.getInt(c.getColumnIndex("idEjemplo")), c.getString(c.getColumnIndex("Ejemplo")), modismo.getIdModismo()) : null;
+        Ejemplo ejemplo = c.moveToFirst() ? new Ejemplo(c.getInt(c.getColumnIndex("idEjemplo")), c.getString(c.getColumnIndex("Ejemplo")), modismo.getIdModismo()) : new Ejemplo(-1);
         c.close();
         db.close();
         return ejemplo;

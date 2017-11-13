@@ -16,6 +16,9 @@ import java.io.IOException;
 public class ContactoConServidor extends Thread {
 
     private Context context;
+    private java.net.HttpURLConnection con;
+    private java.io.DataInputStream entrada;
+    private java.io.DataOutputStream salida;
     private JSONObject json;
     private AccionContactoConServidor accion;
     private String status;
@@ -35,15 +38,15 @@ public class ContactoConServidor extends Thread {
             // 73:8080/ServidorBrenda/MainEntrance
             String customURL;
             String host;
-            java.net.HttpURLConnection con = // 10.0.2.2
+            con = // 10.0.2.2
                     (java.net.HttpURLConnection) new java.net.URL(customURL = "http://"+ ("NaN".equals(host = ProveedorDeRecursos.obtenerRecursoString(context, "host")) ? "192.168.0.21" : host)+":8080/BMLSampleUnit/Hurricane").openConnection();
             Log.d("ContactoConServidor", "Connecting to: " + customURL);
             con.setDoOutput(true);
-            java.io.DataOutputStream salida = new java.io.DataOutputStream(con.getOutputStream());
+            salida = new java.io.DataOutputStream(con.getOutputStream());
             json.put("action", action);
             salida.write(json.toString().getBytes());
             salida.flush();
-            java.io.DataInputStream entrada = new java.io.DataInputStream(con.getInputStream());
+            entrada = new java.io.DataInputStream(con.getInputStream());
             byte[] chunk = new byte[256];
             final java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
             int length;
@@ -59,6 +62,22 @@ public class ContactoConServidor extends Thread {
             accion.accionNegativa(status);
         }
         Log.d("ContactoConServidor", status);
+    }
+
+    public String getStatusId(){
+        return json.toString();
+    }
+
+    public void closeConnection(){
+        con.disconnect();
+        try {
+            entrada.close();
+            salida.close();
+        }catch(java.io.IOException e){
+            e.printStackTrace();
+            status = e.getMessage();
+        }
+        Log.e("ContactoConServidor", "Conexión detenida: " + json.toString());
     }
 
     public interface AccionContactoConServidor{
