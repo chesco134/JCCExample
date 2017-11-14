@@ -109,7 +109,7 @@ public class MyRowListAdapter extends BaseAdapter {
         public void onClick(View view){
             ((CentralPoint)context).displayWaitingActivity(context.getString(R.string.cargando_datos_interes));
             Pais p;
-            ProveedorDeRecursos.guardaRecursoString(context, ProveedorDeRecursos.PAIS_ACTUAL, pais);
+            ProveedorDeRecursos.guardaRecursoInt(context, ProveedorDeRecursos.PAIS_ACTUAL, AccionesLectura.obtenerPais(context,pais).getIdPais());
             DatoInteres[] datosInteres = AccionesLectura.obtenerDatosInteresPais(context, p = AccionesLectura.obtenerPais(context, pais));
             Log.d("PaisesGrid", "Had: " + p.getIdPais() + " from: " + p.getPais() + " con " + datosInteres.length + " datos de interés.");
             List<String> listaDatosInteres = new ArrayList<>();

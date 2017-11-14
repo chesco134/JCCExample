@@ -3,6 +3,7 @@ package com.example.brenda.jccexample.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.example.brenda.jccexample.pojo.DatoInteres;
@@ -155,7 +156,6 @@ public class AccionesLectura {
                 modismo.setExpresion(c.getString(c.getColumnIndex("Expresion")));
                 modismo.setPais(c.getInt(c.getColumnIndex("idPais")));
                 modismos.add(modismo);
-                Log.d(AccionesLectura.class.getName(), modismo.getExpresion());
             }
         }else{
             Log.d(AccionesLectura.class.getName(), "No hay modismos.");
@@ -223,5 +223,41 @@ public class AccionesLectura {
         c.close();
         db.close();
         return modismosRelacionados.toArray(new ModismoRelacion[]{});
+    }
+
+    public static int obtenerUltimoIdModismo(Context context) {
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select idModismo from Modismo order by idModismo desc limit 1", null);
+        int idModismo = c.moveToFirst() ? c.getInt(c.getColumnIndex("idModismo")) : -1;
+        c.close();
+        db.close();
+        return idModismo;
+    }
+
+    public static int obtenerUltimoIdEjemplo(Context context) {
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select idEjemplo from Ejemplo order by idEjemplo desc limit 1", null);
+        int idEjemplo = c.moveToFirst() ? c.getInt(c.getColumnIndex("idEjemplo")) : -1;
+        c.close();
+        db.close();
+        return idEjemplo;
+    }
+
+    public static int obtenerUltimoIdSignificado(Context context) {
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select idSignificado from Significado order by idSignificado desc limit 1", null);
+        int idSignificado = c.moveToFirst() ? c.getInt(c.getColumnIndex("idSignificado")) : -1;
+        c.close();
+        db.close();
+        return idSignificado;
+    }
+
+    public static int obtenerUltimoIdSimilar(Context context) {
+        SQLiteDatabase db = new MyDB(context).getReadableDatabase();
+        Cursor c = db.rawQuery("select idSimilar from Similar order by idSimilar desc limit 1", null);
+        int idSimilar = c.moveToFirst() ? c.getInt(c.getColumnIndex("idSimilar")) : -1;
+        c.close();
+        db.close();
+        return idSimilar;
     }
 }

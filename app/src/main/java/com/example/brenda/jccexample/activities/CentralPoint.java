@@ -29,6 +29,7 @@ import com.example.brenda.jccexample.database.AccionesLectura;
 import com.example.brenda.jccexample.database.MyDB;
 import com.example.brenda.jccexample.dialogos.EntradaTexto;
 import com.example.brenda.jccexample.dialogos.ProveedorToast;
+import com.example.brenda.jccexample.dialogos.RegistroDeModismo;
 import com.example.brenda.jccexample.fragmentos.DummyDisplayFragment;
 import com.example.brenda.jccexample.fragmentos.HilosTrabajando;
 import com.example.brenda.jccexample.fragmentos.ListaPaisesFragment;
@@ -283,7 +284,7 @@ public class CentralPoint extends AppCompatActivity
                     JSONObject json = new JSONObject(content);
                     if(json.getBoolean("content")) {
                         Pais pais;
-                        ProveedorDeRecursos.guardaRecursoString(CentralPoint.this, ProveedorDeRecursos.PAIS_ACTUAL, PaisParser.parsePais(json.getJSONObject("Pais")).getPais());
+                        ProveedorDeRecursos.guardaRecursoInt(CentralPoint.this, ProveedorDeRecursos.PAIS_ACTUAL, PaisParser.parsePais(json.getJSONObject("Pais")).getIdPais());
                         AccionesEscritura.escribePais(CentralPoint.this, pais = PaisParser.parsePais(json.getJSONObject("Pais")));
                         ccs2 = new ContactoConServidor(CentralPoint.this, 2, ProveedorSolicitudes.solicitudDatoInteres(pais), new ContactoConServidor.AccionContactoConServidor() {
                             @Override
@@ -431,7 +432,7 @@ public class CentralPoint extends AppCompatActivity
                         if(mlp.isConnected())
                             mlp.stopLocationUpdates();
                     }else{
-                        ProveedorDeRecursos.guardaRecursoString(CentralPoint.this, ProveedorDeRecursos.PAIS_ACTUAL, "");
+                        ProveedorDeRecursos.guardaRecursoInt(CentralPoint.this, ProveedorDeRecursos.PAIS_ACTUAL, -1);
                         message = "Ubicación desconocida";
                         final DummyDisplayFragment ddf = new DummyDisplayFragment();
                         Bundle args = new Bundle();
@@ -531,6 +532,11 @@ public class CentralPoint extends AppCompatActivity
 
     private void launchAgregarModismo(){
         // Add it to Back Stack
+        RegistroDeModismo rdm = new RegistroDeModismo();
+        Bundle args = new Bundle();
+        args.putString("titulo", "Nuevo Modismo");
+        rdm.setArguments(args);
+        rdm.show(getSupportFragmentManager(), "Agregar Modismo");
     }
 
     private void launchVerModismos(){

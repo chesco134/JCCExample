@@ -2,6 +2,7 @@ package com.example.brenda.jccexample.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.app.FragmentActivity;
 
 import com.example.brenda.jccexample.R;
 
@@ -17,6 +18,10 @@ public class ProveedorDeRecursos {
     public static String obtenerEmail(Context context){
         return context.getSharedPreferences(CentralPoint.class.getName(), Context.MODE_PRIVATE)
                 .getString("email", "NaN");
+    }
+
+    public static int obtenerColorDeError(Context context){
+        return context.getResources().getColor(R.color.error);
     }
 
     public static String obtenerUsuario(Context context){
@@ -40,5 +45,9 @@ public class ProveedorDeRecursos {
 
     public static String obtenerRecursoString(Context context, String nombre){
         return context.getSharedPreferences(Configuraciones.class.getName(), Context.MODE_PRIVATE).getString(nombre, "NaN");
+    }
+
+    public static int obtenerRecursoInt(Context context, String nombre) {
+        return context.getSharedPreferences(Configuraciones.class.getName(), Context.MODE_PRIVATE).getInt(nombre, -1);
     }
 }

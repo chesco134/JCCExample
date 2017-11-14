@@ -69,4 +69,8 @@
     <string name="on_back_pressed_message">Presione nuevamente para cancelar.</string>
     <string name="no_modismos_relacionados">No hay modismos relacionados por el momento.</string>
     <string name="significado_fragment_relacionado_label">Relacionado:</string>
+    <string name="formato_registro_de_modismo_expresion">Expresión</string>
+    <string name="formato_registro_de_modismo_ejemplo">Ejemplo</string>
+    <string name="formato_registro_de_modismo_significado">Significado</string>
+    <string name="formato_registro_de_modismo_similar">Similar</string>
 </resources>
