@@ -108,18 +108,23 @@ public class MyRowListAdapter extends BaseAdapter {
         @Override
         public void onClick(View view){
             ((CentralPoint)context).displayWaitingActivity(context.getString(R.string.cargando_datos_interes));
-            Pais p;
-            ProveedorDeRecursos.guardaRecursoInt(context, ProveedorDeRecursos.PAIS_ACTUAL, AccionesLectura.obtenerPais(context,pais).getIdPais());
-            DatoInteres[] datosInteres = AccionesLectura.obtenerDatosInteresPais(context, p = AccionesLectura.obtenerPais(context, pais));
-            Log.d("PaisesGrid", "Had: " + p.getIdPais() + " from: " + p.getPais() + " con " + datosInteres.length + " datos de interés.");
-            List<String> listaDatosInteres = new ArrayList<>();
-            for(DatoInteres datoInteres : datosInteres)
-                listaDatosInteres.add(datoInteres.getDatoInteres());
-            Bundle args = new Bundle();
-            args.putStringArray("datos_interes", listaDatosInteres.toArray(new String[]{}));
-            ListaDatoInteres fragment = new ListaDatoInteres();
-            fragment.setArguments(args);
-            ((CentralPoint) context).cambioDeFragmentConBackStack(fragment);
+            new Thread() {
+                @Override
+                public void run() {
+                    Pais p;
+                    ProveedorDeRecursos.guardaRecursoInt(context, ProveedorDeRecursos.PAIS_ACTUAL, AccionesLectura.obtenerPais(context, pais).getIdPais());
+                    DatoInteres[] datosInteres = AccionesLectura.obtenerDatosInteresPais(context, p = AccionesLectura.obtenerPais(context, pais));
+                    Log.d("PaisesGrid", "Had: " + p.getIdPais() + " from: " + p.getPais() + " con " + datosInteres.length + " datos de interés.");
+                    List<String> listaDatosInteres = new ArrayList<>();
+                    for (DatoInteres datoInteres : datosInteres)
+                        listaDatosInteres.add(datoInteres.getDatoInteres());
+                    Bundle args = new Bundle();
+                    args.putStringArray("datos_interes", listaDatosInteres.toArray(new String[]{}));
+                    ListaDatoInteres fragment = new ListaDatoInteres();
+                    fragment.setArguments(args);
+                    ((CentralPoint) context).cambioDeFragmentConBackStack(fragment);
+                }
+            }.start();
         }
     }
 
