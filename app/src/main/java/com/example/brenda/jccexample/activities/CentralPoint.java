@@ -572,6 +572,7 @@ public class CentralPoint extends AppCompatActivity
             List<String> results = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
             String spokenText = results.get(0);
+
             // Do something with spokenText
             mainTextView.setText(spokenText);
         }else if(requestCode == ACTIVIDAD_DE_ESPERA && resultCode != RESULT_OK){
