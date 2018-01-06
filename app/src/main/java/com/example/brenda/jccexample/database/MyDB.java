@@ -72,6 +72,7 @@ public class MyDB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS `DatoInteres`");
         db.execSQL("DROP TABLE IF EXISTS `Modismo`");
         db.execSQL("DROP TABLE IF EXISTS `Pais`");
+        db.execSQL("DROP TABLE IF EXISTS `SampleTable`");
 
         db.execSQL("create table Pais(" +
                 "        idPais integer not null primary key," +
@@ -114,6 +115,11 @@ public class MyDB extends SQLiteOpenHelper {
                 "        foreign key(idModismo_1) references Modismo(idModismo) on delete cascade on update cascade," +
                 "        foreign key(idModismo_2) references Modismo(idModismo) on delete cascade on update cascade" +
                 ")");
+        db.execSQL("create table SampleTable(" +
+                "       idSampleTable integer not null," +
+                "       Modismo text not null" +
+                ")");
+        db.execSQL("insert into SampleTable values(1,'Épale'),(2,'Sacarrácate'),(3,'Mojiganga'),(4,'Échale')");
     }
 
 }

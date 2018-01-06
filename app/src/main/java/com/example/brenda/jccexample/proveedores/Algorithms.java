@@ -276,18 +276,18 @@ public class Algorithms {
     }
     
     public void blueberry() {
-    	System.out.println();
+    	// System.out.println();
     	String shortString = str1.length() < str2.length() ? str1 : str2;
     	String longString = shortString.equals(str1) ? str2 : str1;
     	int window = (int)(((float)shortString.length())/(2f))+1;
-    	System.out.println(window);
+//    	System.out.println(window);
     	short[][] booleanMtx = new short[shortString.length()+1][shortString.length()+1];
     	int i;
     	int j;
-    	System.out.print("  ");
-    	for(i=0; i<shortString.length(); i++)
-    		System.out.print(String.valueOf(shortString.charAt(i)) + " ");
-    	System.out.println();
+//    	System.out.print("  ");
+//    	for(i=0; i<shortString.length(); i++)
+//    		System.out.print(String.valueOf(shortString.charAt(i)) + " ");
+//    	System.out.println();
     	for(i=1; i<=shortString.length(); i++) {
 			if(shortString.charAt(i-1) == longString.charAt(i-1)) {
 				booleanMtx[i][i] = 1;
@@ -309,12 +309,12 @@ public class Algorithms {
 	    		}
 			}
     	}
-    	for(i=1; i<=shortString.length(); i++) {
-    		System.out.print(String.valueOf(longString.charAt(i-1)) + " ");
-    		for(j=1; j<=shortString.length(); j++)
-    			System.out.print(booleanMtx[i][j] + " ");
-    		System.out.println();
-    	}
+//    	for(i=1; i<=shortString.length(); i++) {
+//    		System.out.print(String.valueOf(longString.charAt(i-1)) + " ");
+//    		for(j=1; j<=shortString.length(); j++)
+//    			System.out.print(booleanMtx[i][j] + " ");
+//    		System.out.println();
+//    	}
     }
     
     public double doJaroInformatica() {
@@ -370,19 +370,21 @@ public class Algorithms {
     					break;
     	    		}
     			}
-    			if(!found) {System.out.println((largeString.substring(0,i).length() > comparisonWindow-1 ? i - comparisonWindow + 2: 0));
+    			if(!found) {
+//    				System.out.println((largeString.substring(0,i).length() > comparisonWindow-1 ? i - comparisonWindow + 2: 0));
         			for(int j=i-1; j >= (largeString.substring(0,i).length() > comparisonWindow-1 ? i - comparisonWindow + 1: 0); j--) {
-        				System.out.println(shortString.charAt(i) + " vs " + largeString.charAt(j));
+//        				System.out.println(shortString.charAt(i) + " vs " + largeString.charAt(j));
     					if( found = shortString.charAt(i) == largeString.charAt(j)) {
-    						System.out.println("Lo encontré abajo: " + largeString.charAt(j) + " (" + (i+1) + ")");
+//    						System.out.println("Lo encontré abajo: " + largeString.charAt(j) + " (" + (i+1) + ")");
         					for(int k=0; k<i; k++) {
-        						System.out.print(cells[k].positionX + " " + cells[k].positionY+"|");
-        						if(innerFound = (cells[k].positionX == j+1)) {System.out.println("Found.");
+//        						System.out.print(cells[k].positionX + " " + cells[k].positionY+"|");
+        						if(innerFound = (cells[k].positionX == j+1)) {
+//        							System.out.println("Found.");
         							cell.setOn(true);
         							break;
         						}
         					}
-        					System.out.println();
+//        					System.out.println();
         					if(!innerFound) {
 	        	    			cell.setOn(true);
 	        	    			cell.setPositionX(i+1);
@@ -401,7 +403,7 @@ public class Algorithms {
     	for(int i=0; i<cells.length; i++) {
     		if(!cells[i].isDiagonal() && cells[i].isOn() && cells[i].positionX != 0 && cells[i].positionY != 0) {
 	    		transposes++;
-	    		System.out.println("#" + (i+1) + " IsDiagonal? " + cells[i].isDiagonal() + ". IsOn? " + cells[i].isOn());
+//	    		System.out.println("#" + (i+1) + " IsDiagonal? " + cells[i].isDiagonal() + ". IsOn? " + cells[i].isOn());
     		}
     	}
     	List<MyBooleanCell> myCells = new ArrayList<>();

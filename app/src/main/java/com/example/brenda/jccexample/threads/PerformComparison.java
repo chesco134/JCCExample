@@ -1,11 +1,13 @@
 package com.example.brenda.jccexample.threads;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.brenda.jccexample.database.MyDB;
+import com.example.brenda.jccexample.dialogos.ProveedorToast;
 import com.example.brenda.jccexample.proveedores.Algorithms;
 
 import java.util.ArrayList;
@@ -20,47 +22,99 @@ public class PerformComparison extends Thread {
 
     private String reference;
     private Context context;
+    private OnFinishActions actions;
+    private ArrayList<MyValue> valuesD;
+    private ArrayList<MyValue> top5;
+    private ArrayList<MyValue> bestWishes;
 
     public PerformComparison(Context context, String reference){
         this.context = context;
         this.reference = reference;
+        this.actions = new OnFinishActions() {
+            @Override
+            public void activityActions(PerformComparison pc) {}
+        };
+    }
+
+    public PerformComparison(Context context, String reference, OnFinishActions actions){
+        this.context = context;
+        this.reference = reference;
+        this.actions = actions;
+    }
+
+    public ArrayList<MyValue> getValuesD() {
+        return valuesD;
+    }
+
+    public void setValuesD(ArrayList<MyValue> valuesD) {
+        this.valuesD = valuesD;
+    }
+
+    public ArrayList<MyValue> getTop5() {
+        return top5;
+    }
+
+    public void setTop5(ArrayList<MyValue> top5) {
+        this.top5 = top5;
+    }
+
+    public ArrayList<MyValue> getBestWishes() {
+        return bestWishes;
+    }
+
+    public void setBestWishes(ArrayList<MyValue> bestWishes) {
+        this.bestWishes = bestWishes;
     }
 
     @Override
     public void run(){
         SQLiteDatabase db = new MyDB(context).getReadableDatabase();
-        Cursor c = db.rawQuery("select Expresion from Modismo", null);
+        Cursor c = db.rawQuery("select Modismo from SampleTable", null);
         Algorithms algs = new Algorithms();
-        algs.setStr1(reference);
+        algs.setStr1(reference.toUpperCase());
         MyValue[] values = new MyValue[4];
-        List<MyValue> top5 = new ArrayList<>();
-        List<MyValue> bestWishes = new ArrayList<>();
-        List<MyValue> valuesD = new ArrayList<>();
+        MyValue[] valuesBestWishes;
+        top5 = new ArrayList<>();
+        bestWishes = new ArrayList<>();
+        valuesD = new ArrayList<>();
         MyValue value;
+        MyValue valueBestWishes;
         while(c.moveToNext()){
-            algs.setStr2(c.getString(c.getColumnIndex("Modismo")));
-            values[0] = new MyValue(algs.getStr2(),algs.doEdit());
+            algs.setStr2(c.getString(c.getColumnIndex("Modismo")).toUpperCase());
+            values[0] = new MyValue(algs.getStr2(),algs.doEditInformatica());
             values[1] = new MyValue(algs.getStr2(),algs.doHamming());
             values[2] = new MyValue(algs.getStr2(),algs.doBigramInformatica());
             values[3] = new MyValue(algs.getStr2(),algs.doJaroInformatica());
+            Log.d("Values", algs.getStr1() + " vs " + algs.getStr2() + "\n\tEdit: " + values[0].getValue()
+                + "\n\tHamming: " + values[1].getValue()
+                + "\n\tBigram: " + values[2].getValue()
+                + "\n\tJaro: " + values[3].getValue());
             if((value=getGreatest(values)).getValue() >= 0.8d ) {
                 valuesD.add(value);
             }
+            bestWishes.add(getGreatest(values));
         }
         c.close();
         db.close();
         value = getGreatest(values = valuesD.toArray(new MyValue[]{}));
+        valueBestWishes = getGreatest(valuesBestWishes = bestWishes.toArray(new MyValue[]{}));
         if(value.getValue() >= 0.8d){
             top5.addAll(Arrays.asList(values).subList(0, (values.length > 4 ? 5 : values.length)));
             Log.e("BackReader", "There were values!");
             for(MyValue mValue : top5)
-                Log.d("BackReader", mValue.getExpression());
-        }else{
-            bestWishes.addAll(Arrays.asList(values).subList(0, (values.length > 4 ? 5 : values.length)));
+                Log.d("BackReader", mValue.getExpression() + ": " + mValue.getValue());
+        }else {
             Log.e("BackReader", "There were no valuable coincidences. Giving best wishes:");
-            for(MyValue mValue : bestWishes)
-                Log.d("BackReader", mValue.getExpression());
+            for (MyValue mValue : valuesBestWishes)
+                Log.d("BackReader", mValue.getExpression() + ": " + mValue.getValue());
         }
+        actions.activityActions(this);
+        displayNotification();
+    }
+
+    private void displayNotification(){
+        ((Activity)context).runOnUiThread(new Runnable(){ @Override public void run(){
+            ProveedorToast.showToast(context,"Done. Review Logs."); } });
     }
 
     private MyValue getGreatest(MyValue[] values){
@@ -73,10 +127,10 @@ public class PerformComparison extends Thread {
                     values[j] = value;
                 }
             }
-        return values[0];
+        return values != null && values.length > 0 ? values[0] : new MyValue("", 0d);
     }
 
-    private class MyValue{
+    public class MyValue{
 
         private String expression;
         private Double value;
@@ -84,6 +138,11 @@ public class PerformComparison extends Thread {
         MyValue(String expression, Double value) {
             this.expression = expression;
             this.value = value;
+        }
+
+        @Override
+        public String toString(){
+            return expression + ": " + value;
         }
 
         Double getValue() {
@@ -101,5 +160,9 @@ public class PerformComparison extends Thread {
         public void setExpression(String expression) {
             this.expression = expression;
         }
+    }
+
+    public interface OnFinishActions{
+        void activityActions(PerformComparison pc);
     }
 }

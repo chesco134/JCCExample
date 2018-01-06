@@ -73,4 +73,5 @@
     <string name="formato_registro_de_modismo_ejemplo">Ejemplo</string>
     <string name="formato_registro_de_modismo_significado">Significado</string>
     <string name="formato_registro_de_modismo_similar">Similar</string>
+    <string name="testing_algorythms_layout_submit">Submit</string>
 </resources>
