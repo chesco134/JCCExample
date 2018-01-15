@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.brenda.jccexample.database.MyDB;
 import com.example.brenda.jccexample.dialogos.ProveedorToast;
+import com.example.brenda.jccexample.pojo.Modismo;
 import com.example.brenda.jccexample.proveedores.Algorithms;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class PerformComparison extends Thread {
     @Override
     public void run(){
         SQLiteDatabase db = new MyDB(context).getReadableDatabase();
-        Cursor c = db.rawQuery("select Modismo from SampleTable", null);
+        Cursor c = db.rawQuery("select * from Modismo", null);
         Algorithms algs = new Algorithms();
         algs.setStr1(reference.toUpperCase());
         MyValue[] values = new MyValue[4];
@@ -77,14 +78,21 @@ public class PerformComparison extends Thread {
         top5 = new ArrayList<>();
         bestWishes = new ArrayList<>();
         valuesD = new ArrayList<>();
+        Modismo modismo;
         MyValue value;
         MyValue valueBestWishes;
+        Log.d("PerformComparison", "We got: " + c.getCount() + " fields.");
         while(c.moveToNext()){
-            algs.setStr2(c.getString(c.getColumnIndex("Modismo")).toUpperCase());
+            algs.setStr2(c.getString(c.getColumnIndex("Expresion")).toUpperCase());
+            modismo = new Modismo(c.getInt(c.getColumnIndex("idModismo")), c.getString(c.getColumnIndex("Expresion")), c.getInt(c.getColumnIndex("idPais")));
             values[0] = new MyValue(algs.getStr2(),algs.doEditInformatica());
+            values[0].setModismo(modismo);
             values[1] = new MyValue(algs.getStr2(),algs.doHamming());
+            values[1].setModismo(modismo);
             values[2] = new MyValue(algs.getStr2(),algs.doBigramInformatica());
+            values[2].setModismo(modismo);
             values[3] = new MyValue(algs.getStr2(),algs.doJaroInformatica());
+            values[3].setModismo(modismo);
             Log.d("Values", algs.getStr1() + " vs " + algs.getStr2() + "\n\tEdit: " + values[0].getValue()
                 + "\n\tHamming: " + values[1].getValue()
                 + "\n\tBigram: " + values[2].getValue()
@@ -134,6 +142,7 @@ public class PerformComparison extends Thread {
 
         private String expression;
         private Double value;
+        private Modismo modismo;
 
         MyValue(String expression, Double value) {
             this.expression = expression;
@@ -159,6 +168,14 @@ public class PerformComparison extends Thread {
 
         public void setExpression(String expression) {
             this.expression = expression;
+        }
+
+        public Modismo getModismo() {
+            return modismo;
+        }
+
+        public void setModismo(Modismo modismo) {
+            this.modismo = modismo;
         }
     }
 

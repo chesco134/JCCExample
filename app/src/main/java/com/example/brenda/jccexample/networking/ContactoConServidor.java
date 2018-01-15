@@ -39,7 +39,7 @@ public class ContactoConServidor extends Thread {
             String customURL;
             String host;
             con = // 10.0.2.2
-                    (java.net.HttpURLConnection) new java.net.URL(customURL = "http://"+ ("NaN".equals(host = ProveedorDeRecursos.obtenerRecursoString(context, "host")) ? "192.168.0.21" : host)+":8080/BMLSampleUnit/Hurricane").openConnection();
+                    (java.net.HttpURLConnection) new java.net.URL(customURL = "http://"+ ("NaN".equals(host = ProveedorDeRecursos.obtenerRecursoString(context, "host")) ? "192.168.94.154" : host)+":8080/BMLSampleUnit/Hurricane").openConnection();
             Log.d("ContactoConServidor", "Connecting to: " + customURL);
             con.setDoOutput(true);
             salida = new java.io.DataOutputStream(con.getOutputStream());

@@ -8,6 +8,7 @@ import com.example.brenda.jccexample.pojo.Ejemplo;
 import com.example.brenda.jccexample.pojo.Modismo;
 import com.example.brenda.jccexample.pojo.ModismoRelacion;
 import com.example.brenda.jccexample.pojo.Significado;
+import com.example.brenda.jccexample.pojo.Similar;
 
 /**
  * Created by jcapiz on 12/11/17.
@@ -44,6 +45,17 @@ public class AccionesActualizacion {
         values.put("Significado", significado.getSignificado());
         values.put("idModismo", significado.getIdModismo());
         boolean wasUpdated = db.update("Significado", values, "idSignificado = cast(? as integer)", new String[]{String.valueOf(significado.getIdSignificado())}) > 0;
+        db.close();
+        return wasUpdated;
+    }
+
+    public static boolean actualizaSimilar(Context context, Similar similar){
+        SQLiteDatabase db = new MyDB(context).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("idSimilar", similar.getIdSimilar());
+        values.put("Similar", similar.getSimilar());
+        values.put("idmodismo", similar.getIdModismo());
+        boolean wasUpdated = db.update("Similar",values, "idSimilar = cast(? as integer)", new String[]{String.valueOf(similar.getIdSimilar())}) > 0;
         db.close();
         return wasUpdated;
     }

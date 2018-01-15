@@ -14,8 +14,8 @@
         android:theme="@style/MyAppTheme">
         <activity android:name=".activities.SimpleListShowActivity" />
         <activity android:name=".activities.ActividadDeEspera" />
-        <activity android:name=".activities.CentralPoint"/>
-        <activity android:name=".activities.TestingActivity"
+        <activity android:name=".activities.TestingActivity"/>
+        <activity android:name=".activities.CentralPoint"
             android:theme="@style/MyAppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

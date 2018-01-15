@@ -150,6 +150,7 @@ public class AccionesLectura {
         Cursor c = db.rawQuery("select * from Modismo", null);
         List<Modismo> modismos = new ArrayList<>();
         Modismo modismo;
+        Log.d("AccionesLectura", "We got: " + c.getCount() + " modismos.");
         if(c.moveToFirst()) {
             while (c.moveToNext()){
                 modismo = new Modismo(c.getInt(c.getColumnIndex("idModismo")));

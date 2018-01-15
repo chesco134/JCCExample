@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
 import com.example.brenda.jccexample.R;
+import com.example.brenda.jccexample.fragmentos.SignificadoListFragment;
 import com.example.brenda.jccexample.fragmentos.SimpleListFragment;
 
 /**
@@ -20,6 +21,15 @@ public class SimpleListShowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.frame_layout);
+        Bundle args = getIntent().getExtras();
+        if(args != null){
+            SignificadoListFragment slf = new SignificadoListFragment();
+            Bundle args01 = new Bundle();
+            args.putInt("idModismo", args.getInt("idModismo"));
+            slf.setArguments(args01);
+            changeFragment(slf);
+        }
+        else
         if(savedInstanceState == null)
         changeFragment(new SimpleListFragment());
     }

@@ -53,6 +53,12 @@ public class MyDB extends SQLiteOpenHelper {
                 "        idModismo integer not null," +
                 "        foreign key(idModismo) references Modismo(idModismo) on delete cascade on update cascade" +
                 ")");
+        db.execSQL("CREATE TABLE Similar (" +
+                "        idSimilar integer NOT NULL primary key," +
+                "        Similar text not null," +
+                "        idModismo integer NOT NULL," +
+                "        foreign key(idModismo) references Modismo(idModismo) on delete cascade on update cascade" +
+                ")");
         db.execSQL("create table ModismoRelacion(" +
                 "        idModismo_1 integer not null," +
                 "        idModismo_2 integer not null," +

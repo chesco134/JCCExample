@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.brenda.jccexample.R;
+import com.example.brenda.jccexample.activities.SimpleListShowActivity;
 import com.example.brenda.jccexample.adapters.RowListAdapter;
 import com.example.brenda.jccexample.pojo.Modismo;
 import com.example.brenda.jccexample.pojo.Similar;
@@ -34,11 +35,17 @@ public class SimpleListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.simple_list_view, parent, false);
         ListView listView = (ListView) rootView.findViewById(R.id.simple_list_view_list);
         Bundle args;
-        modismos = (savedInstanceState == null ? ((args = getArguments()) != null ? args.getStringArray("modismos") : null) : savedInstanceState.getStringArray("modismos"));
+        modismos =
+                (savedInstanceState == null ? ((args = getArguments()) != null ? args.getStringArray("modismos") : null) : savedInstanceState.getStringArray("modismos"));
         if(modismos != null) {
             listView.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, modismos));
         }else
-            listView.setAdapter(new RowListAdapter(context));
+            listView.setAdapter(new RowListAdapter(context, new RowListAdapter.RowListListener() {
+                @Override
+                public void clickAction(Fragment fragment) {
+                    ((SimpleListShowActivity) context).changeFragmentWithBackstack(fragment);
+                }
+            }));
         return rootView;
     }
 

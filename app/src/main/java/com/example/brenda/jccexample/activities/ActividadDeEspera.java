@@ -44,8 +44,7 @@ public class ActividadDeEspera extends Activity {
 
 	@Override
 	public void onBackPressed(){
-		attempts++;
-		switch(attempts){
+		switch(attempts++){
 			case 1:
 				ProveedorToast.showToast(this, getString(R.string.on_back_pressed_message));
 				break;

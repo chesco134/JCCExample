@@ -33,7 +33,9 @@ import com.example.brenda.jccexample.dialogos.RegistroDeModismo;
 import com.example.brenda.jccexample.fragmentos.DummyDisplayFragment;
 import com.example.brenda.jccexample.fragmentos.HilosTrabajando;
 import com.example.brenda.jccexample.fragmentos.ListaPaisesFragment;
+import com.example.brenda.jccexample.fragmentos.SignificadoListFragment;
 import com.example.brenda.jccexample.fragmentos.SimpleFragment;
+import com.example.brenda.jccexample.fragmentos.SimpleListFragment;
 import com.example.brenda.jccexample.gps.MyLocationProvider;
 import com.example.brenda.jccexample.networking.ContactoConServidor;
 import com.example.brenda.jccexample.parser.DatoInteresParser;
@@ -66,6 +68,7 @@ public class CentralPoint extends AppCompatActivity
     private static final int SPEECH_REQUEST_CODE = 0;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 18;
     private static final int ACTIVIDAD_DE_ESPERA = 134;
+    private static final int LOOK_FOR_MODISMO = 319;
 
     private int isFirstTime = 0;
     private boolean secondTime;
@@ -190,7 +193,7 @@ public class CentralPoint extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item){
         int itemId = item.getItemId();
         if(itemId == R.id.action_add_by_voice){
-            launchSpeechRecognizer();
+            startActivityForResult(new Intent(this, TestingActivity.class), LOOK_FOR_MODISMO);
             return true;
         }else if (itemId == R.id.action_retry) {
             performLocationCheck();
@@ -229,6 +232,8 @@ public class CentralPoint extends AppCompatActivity
     }
 
     private void performLocationCheck(){
+        updateLocationData(-1,-1);
+        /*
         int permissionCheck = ContextCompat
                 .checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -239,6 +244,7 @@ public class CentralPoint extends AppCompatActivity
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
+        */
     }
 
     private void setHost(){
@@ -418,7 +424,7 @@ public class CentralPoint extends AppCompatActivity
                                     @Override
                                     public void run() {
                                         try {
-                                   cambioDeFragmentConBackStack(new DummyDisplayFragment());
+                                            cambioDeFragmentConBackStack(new DummyDisplayFragment());
                                         }catch(IllegalStateException ex){
                                             HAY_ERROR = true;
                                         }
@@ -574,9 +580,14 @@ public class CentralPoint extends AppCompatActivity
             String spokenText = results.get(0);
 
             // Do something with spokenText
-            mainTextView.setText(spokenText);
+//            mainTextView.setText(spokenText);
+            Intent i = new Intent(this, TestingActivity.class);
+            i.putExtra("voice_value", spokenText);
+            startActivity(i);
         }else if(requestCode == ACTIVIDAD_DE_ESPERA && resultCode != RESULT_OK){
 //            onBackPressed();
+        }else if(requestCode == LOOK_FOR_MODISMO && resultCode == RESULT_OK){
+
         }
         Log.d("Atún", "Request code: " + requestCode + ", resultCode: " + resultCode + ", data? " + (data != null) + " $$ " + RESULT_OK);
 
