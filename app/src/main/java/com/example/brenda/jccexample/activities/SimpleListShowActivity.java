@@ -3,6 +3,7 @@ package com.example.brenda.jccexample.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.example.brenda.jccexample.R;
@@ -25,8 +26,9 @@ public class SimpleListShowActivity extends AppCompatActivity {
         if(args != null){
             SignificadoListFragment slf = new SignificadoListFragment();
             Bundle args01 = new Bundle();
-            args.putInt("idModismo", args.getInt("idModismo"));
+            args01.putInt("idModismo", args.getInt("idModismo"));
             slf.setArguments(args01);
+            Log.e("SLSA", "We got a Modismo to show from the SearchView (" + args01.getInt("idModismo"));
             changeFragment(slf);
         }
         else
