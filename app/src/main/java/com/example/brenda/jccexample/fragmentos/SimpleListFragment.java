@@ -3,6 +3,7 @@ package com.example.brenda.jccexample.fragmentos;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class SimpleListFragment extends Fragment {
                 (savedInstanceState == null ? ((args = getArguments()) != null ? args.getStringArray("modismos") : null) : savedInstanceState.getStringArray("modismos"));
         if(modismos != null) {
             listView.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, modismos));
+            Log.e("SLF", "We got " + modismos.length + " to show");
         }else
             listView.setAdapter(rla = new RowListAdapter(context, new RowListAdapter.RowListListener() {
                 @Override
@@ -60,7 +62,6 @@ public class SimpleListFragment extends Fragment {
                 if(rla != null) {
                     Modismo modismo = (Modismo) rla.getItem(reverseSortedPositions[0]);
                     rla.remove(modismo);
-                    rla.notifyDataSetChanged();
                     DeleteActions.deleteModismo(context, modismo);
                     ProveedorSnackBar.muestraBarraDeBocados(listView, "Hecho");
                 }
@@ -73,7 +74,6 @@ public class SimpleListFragment extends Fragment {
                 if(rla != null) {
                     Modismo modismo = (Modismo) rla.getItem(reverseSortedPositions[0]);
                     rla.remove(modismo);
-                    rla.notifyDataSetChanged();
                     DeleteActions.deleteModismo(context, modismo);
                     ProveedorSnackBar.muestraBarraDeBocados(listView, "Hecho");
                 }
