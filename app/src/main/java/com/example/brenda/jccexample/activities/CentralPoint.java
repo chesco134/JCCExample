@@ -232,8 +232,7 @@ public class CentralPoint extends AppCompatActivity
     }
 
     private void performLocationCheck(){
-        updateLocationData(-1,-1);
-        /*
+//        updateLocationData(-1,-1);
         int permissionCheck = ContextCompat
                 .checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -244,7 +243,6 @@ public class CentralPoint extends AppCompatActivity
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
-        */
     }
 
     private void setHost(){
