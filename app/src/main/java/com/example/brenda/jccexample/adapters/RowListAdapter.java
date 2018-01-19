@@ -77,42 +77,19 @@ public class RowListAdapter extends BaseAdapter {
         ((TextView) rootView.findViewById(R.id.modismo_row_view_expresion)).setText(modismos.get(position).getExpresion());
         ((TextView) rootView.findViewById(R.id.modismo_row_view_significado)).setText(AccionesLectura.obtenerSignificado(context, modismos.get(position)).getSignificado());
         ((TextView) rootView.findViewById(R.id.modismo_row_view_pais)).setText(AccionesLectura.getIdPaisFromText(context, modismos.get(position).getPais()));
-        rootView.setOnClickListener(new View.OnClickListener() {
+        /*rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SignificadoListFragment slf = new SignificadoListFragment();
-                Bundle args = new Bundle();
-                args.putInt("idModismo", modismos.get(position).getIdModismo());
-                slf.setArguments(args);
-                rll.clickAction(slf);
+
             }
         });
         rootView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                ActualizacionDeModismo adm = new ActualizacionDeModismo();
-                adm.setAm(new ActualizacionDeModismo.ActualizacionModismo() {
-                    @Override
-                    public void listActions(ActualizacionDeModismo actualizacionDeModismo) {
-                        Modismo modismo = modismos.get(position);
-                        modismo.setExpresion(actualizacionDeModismo.getExpresion().getText().toString());
-                        ((TextView) rootView.findViewById(R.id.modismo_row_view_expresion)).setText(actualizacionDeModismo.getExpresion().getText().toString());
-                        ((TextView) rootView.findViewById(R.id.modismo_row_view_significado)).setText(actualizacionDeModismo.getSignificado().getText().toString());
-                        notifyDataSetChanged();
-                    }
-                });
-                Bundle args = new Bundle();
-                args.putString("titulo", ((TextView) rootView.findViewById(R.id.modismo_row_view_expresion)).getText().toString());
-                args.putInt("idModismo", modismos.get(position).getIdModismo());
-                args.putString("expresion", modismos.get(position).getExpresion());
-                args.putString("ejemplo", AccionesLectura.obtenerEjemplo(context, modismos.get(position)).getEjemplo());
-                args.putString("significado", AccionesLectura.obtenerSignificado(context, modismos.get(position)).getSignificado());
-                args.putString("similar", AccionesLectura.obtenerSimilar(context, modismos.get(position)).getSimilar());
-                adm.setArguments(args);
-                adm.show(((AppCompatActivity) context).getSupportFragmentManager(), "Modificar Modismo");
+
                 return true;
             }
-        });
+        });*/
         return rootView;
     }
 

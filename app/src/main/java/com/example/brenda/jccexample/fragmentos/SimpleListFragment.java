@@ -3,19 +3,24 @@ package com.example.brenda.jccexample.fragmentos;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.brenda.jccexample.Listeners.SwipeListViewTouchListener;
 import com.example.brenda.jccexample.R;
 import com.example.brenda.jccexample.activities.SimpleListShowActivity;
 import com.example.brenda.jccexample.adapters.RowListAdapter;
 import com.example.brenda.jccexample.database.AccionesEscritura;
+import com.example.brenda.jccexample.database.AccionesLectura;
 import com.example.brenda.jccexample.database.DeleteActions;
+import com.example.brenda.jccexample.dialogos.ActualizacionDeModismo;
 import com.example.brenda.jccexample.dialogos.ProveedorSnackBar;
 import com.example.brenda.jccexample.dialogos.ProveedorToast;
 import com.example.brenda.jccexample.pojo.Modismo;
@@ -55,10 +60,10 @@ public class SimpleListFragment extends Fragment {
                     ((SimpleListShowActivity) context).changeFragmentWithBackstack(fragment);
                 }
             }));
-        SwipeListViewTouchListener swipe;
-        listView.setOnTouchListener(swipe = new SwipeListViewTouchListener(listView, new SwipeListViewTouchListener.OnSwipeCallback() {
+        SwipeListViewTouchListener touchListener = new SwipeListViewTouchListener(listView,new SwipeListViewTouchListener.OnSwipeCallback() {
             @Override
-            public void onSwipeLeft(ListView listView, int[] reverseSortedPositions) {
+            public void onSwipeLeft(ListView listView, int [] reverseSortedPositions) {
+                //Aqui ponemos lo que hara el programa cuando deslizamos un item ha la izquierda
                 if(rla != null) {
                     Modismo modismo = (Modismo) rla.getItem(reverseSortedPositions[0]);
                     rla.remove(modismo);
@@ -70,7 +75,8 @@ public class SimpleListFragment extends Fragment {
             }
 
             @Override
-            public void onSwipeRight(ListView listView, int[] reverseSortedPositions) {
+            public void onSwipeRight(ListView listView, int [] reverseSortedPositions) {
+                //Aqui ponemos lo que hara el programa cuando deslizamos un item ha la derecha
                 if(rla != null) {
                     Modismo modismo = (Modismo) rla.getItem(reverseSortedPositions[0]);
                     rla.remove(modismo);
@@ -80,8 +86,47 @@ public class SimpleListFragment extends Fragment {
                 else
                     ProveedorSnackBar.muestraBarraDeBocados(listView, "Error");
             }
-        }, true, true));
-        listView.setOnScrollListener(swipe.makeScrollListener());
+        },true, false);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                SignificadoListFragment slf = new SignificadoListFragment();
+                Bundle args = new Bundle();
+                args.putInt("idModismo", ((Modismo)rla.getItem(i)).getIdModismo());
+                slf.setArguments(args);
+                ((SimpleListShowActivity) context).changeFragmentWithBackstack(slf);
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, final View view, final int position, long l) {
+                ActualizacionDeModismo adm = new ActualizacionDeModismo();
+                adm.setAm(new ActualizacionDeModismo.ActualizacionModismo() {
+                    @Override
+                    public void listActions(ActualizacionDeModismo actualizacionDeModismo) {
+                        Modismo modismo = (Modismo)rla.getItem(position);
+                        modismo.setExpresion(actualizacionDeModismo.getExpresion().getText().toString());
+                        ((TextView) view.findViewById(R.id.modismo_row_view_expresion)).setText(actualizacionDeModismo.getExpresion().getText().toString());
+                        ((TextView) view.findViewById(R.id.modismo_row_view_significado)).setText(actualizacionDeModismo.getSignificado().getText().toString());
+                        rla.notifyDataSetChanged();
+                    }
+                });
+                Bundle args = new Bundle();
+                args.putString("titulo", ((TextView) view.findViewById(R.id.modismo_row_view_expresion)).getText().toString());
+                args.putInt("idModismo", ((Modismo)rla.getItem(position)).getIdModismo());
+                args.putString("expresion", ((Modismo)rla.getItem(position)).getExpresion());
+                args.putString("ejemplo", AccionesLectura.obtenerEjemplo(context, ((Modismo)rla.getItem(position))).getEjemplo());
+                args.putString("significado", AccionesLectura.obtenerSignificado(context, ((Modismo)rla.getItem(position))).getSignificado());
+                args.putString("similar", AccionesLectura.obtenerSimilar(context, ((Modismo)rla.getItem(position))).getSimilar());
+                adm.setArguments(args);
+                adm.show(((AppCompatActivity) context).getSupportFragmentManager(), "Modificar Modismo");
+                return false;
+            }
+        });
+        //Escuchadores del listView
+        listView.setOnTouchListener(touchListener);
+        listView.setOnScrollListener(touchListener.makeScrollListener());
         return rootView;
     }
 
